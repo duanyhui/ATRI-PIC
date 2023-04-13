@@ -28,6 +28,8 @@ server:
 # 自定义配置项
 upload:
   path: C:\Users\31165\Desktop\大学相关文档\ATRI-PIC\upload         # 设置文件上传目录
+  thumbnail_path: C:\Users\31165\Desktop\大学相关文档\ATRI-PIC\upload\thumbnail  # 设置缩略图上传目录
+  thumbnail_quality: 1                                  # 设置缩略图质量
   allow_type: "image/jpg,image/png,image/gif,image/jpeg"  # 设置允许上传的文件类型
   local_perfix: "http:/localhost/pic/"                 # 设置本地访问前缀
 

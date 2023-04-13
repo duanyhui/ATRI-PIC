@@ -10,6 +10,8 @@ import duan.service.IPicCoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.utils.PicUtils;
 import duan.utils.UploadUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,7 @@ import java.time.LocalDateTime;
 @Service
 public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> implements IPicCoreService {
 
+
     @Value("${upload.path}")
     private String picPath;
     @Value("${upload.local_perfix}")
@@ -51,11 +54,16 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
 //        PicCore picCore = new PicCore();
         picCore.setFilename(fileName);
         picCore.setLocalurl(localPerfix+fileName);
+        //缩略图文件格式统一为jpg
+        String miniFileName = fileName.substring(0,fileName.lastIndexOf("."))+".jpg";
+        picCore.setMiniurl(localPerfix+"thumbnail/thumbnail_"+miniFileName);
+
         picCoreMapper.insert(picCore);
         LambdaQueryWrapper<PicCore> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(PicCore::getFilename,fileName);
         picCore = picCoreMapper.selectOne(wrapper);
         SetPicAttribute(picCore,file);
+        PicUtils.GenerateMiniImage(file,fileName);
         return Result.succ("上传成功");
     }
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
