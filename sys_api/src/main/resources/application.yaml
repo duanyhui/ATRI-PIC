@@ -1,1 +1,62 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/atripic?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=GMT%2B8&allowMultiQueries=true
+    username: root
+    password: root
 
+  servlet:
+    multipart:
+      max-request-size: 20MB
+      max-file-size: 15MB
+
+
+mybatis-plus:
+  type-aliases-package: duan
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    #输出到日志
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+server:
+  # 端口
+  port: 8082
+
+
+
+
+
+# 自定义配置项
+upload:
+  path: ${user.dir}/upload/         # 设置文件上传目录
+  allow_type: "image/jpg,image/png,image/gif,image/jpeg"  # 设置允许上传的文件类型
+
+
+
+
+############## Sa-Token 配置 (文档: https://sa-token.cc) ##############
+sa-token:
+  # jwt秘钥
+  jwt-secret-key: asdasdasifhueuiwyurfewbfjsdafjk
+  # token名称 (同时也是cookie名称)
+  token-name: satoken
+  # token有效期，单位s 默认30天, -1代表永不过期
+  timeout: 2592000
+  # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
+  activity-timeout: -1
+  # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
+  is-concurrent: true
+  # 在多人登录同一账号时，是否共用一个token (为true时所有登录共用一个token, 为false时每次登录新建一个token)
+  is-share: true
+  # token风格
+  token-style: uuid
+  # 是否输出操作日志
+  is-log: true
+
+qiniu:
+  access_key: qecKwUqYwKV-nN0s6YQKcI08XRB1pzDL0J4icqAS
+  secret_key: lkLp5KuaxSN-jSOHvxc2LTMbzgx-y15gnv9HY1q1
+  bucket: atri-wiki-pic
+  domain: https://qiniu-pic.atri.wiki/
+
+  # 空间里存储的文件名 不需要可以删除
+  documentName: test/
