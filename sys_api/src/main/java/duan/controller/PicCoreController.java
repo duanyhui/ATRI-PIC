@@ -46,7 +46,7 @@ public class PicCoreController {
         if(file.isEmpty()||file.getOriginalFilename()==null)
             throw new RuntimeException("文件名不合法");
         PicCore picCore = new PicCore();
-        picCore.setDescribe(describe);
+        picCore.setInfo(describe);
         picCoreService.upload(file,picCore);
 
 

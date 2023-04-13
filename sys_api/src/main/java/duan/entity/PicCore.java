@@ -36,7 +36,7 @@ public class PicCore implements Serializable {
       @ApiModelProperty("文件名")
       private String filename;
 
-      private String describe;
+      private String info;
 
       @ApiModelProperty("cdn图片链接")
       private String cdnurl;

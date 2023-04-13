@@ -34,6 +34,8 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
 
     @Value("${upload.path}")
     private String picPath;
+    @Value("${upload.local_perfix}")
+    private String localPerfix;
     @Autowired
     private PicCoreMapper picCoreMapper;
     @Autowired
@@ -48,18 +50,21 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
 //        LambdaQueryWrapper<PicCore> wrapper = new LambdaQueryWrapper<>();
 //        PicCore picCore = new PicCore();
         picCore.setFilename(fileName);
-        picCore.setLocalurl(path.toString());
+        picCore.setLocalurl(localPerfix+fileName);
         picCoreMapper.insert(picCore);
         LambdaQueryWrapper<PicCore> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(PicCore::getFilename,fileName);
         picCore = picCoreMapper.selectOne(wrapper);
-
+        SetPicAttribute(picCore,file);
+        return Result.succ("上传成功");
+    }
+    private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
         PicAttribute picAttribute = new PicAttribute();
         picAttribute.setPid(picCore.getPid());
         picAttribute.setHeight(PicUtils.GetImageHeight(file));
         picAttribute.setWidth(PicUtils.GetImageWidth(file));
+        picAttribute.setSize(PicUtils.GetImageSize(file));
         picAttribute.setUpdatetime(LocalDateTime.now());
         picAttributeMapper.insert(picAttribute);
-        return Result.succ("上传成功");
     }
 }

@@ -37,6 +37,7 @@ public class PicAttribute implements Serializable {
 
       @ApiModelProperty("上传时间")
       private LocalDateTime updatetime;
+      private Integer size;
 
 
 }
