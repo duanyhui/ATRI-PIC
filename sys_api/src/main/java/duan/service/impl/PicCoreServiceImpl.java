@@ -10,8 +10,6 @@ import duan.service.IPicCoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.utils.PicUtils;
 import duan.utils.UploadUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -43,15 +41,23 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     private PicCoreMapper picCoreMapper;
     @Autowired
     private PicAttributeMapper picAttributeMapper;
+    @Autowired
+    private TagServiceImpl tagService;
+
+    /**
+     *
+     * @param file
+     * @param picCore
+     * @return 上传图片并生成缩略图，返回图片唯一的Pid
+     * @throws IOException
+     */
     @Override
-    public Result upload(MultipartFile file, PicCore picCore) throws IOException {
+    public Integer upload(MultipartFile file, PicCore picCore) throws IOException {
         //生成随机文件名
         String fileName = UploadUtils.getRandomImgName(file.getOriginalFilename());
         //本地上传
         Path path = Paths.get(picPath,fileName);
         Files.write(path,file.getBytes());
-//        LambdaQueryWrapper<PicCore> wrapper = new LambdaQueryWrapper<>();
-//        PicCore picCore = new PicCore();
         picCore.setFilename(fileName);
         picCore.setLocalurl(localPerfix+fileName);
         //缩略图文件格式统一为jpg
@@ -64,7 +70,9 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
         picCore = picCoreMapper.selectOne(wrapper);
         SetPicAttribute(picCore,file);
         PicUtils.GenerateMiniImage(file,fileName);
-        return Result.succ("上传成功");
+
+
+        return picCore.getPid();
     }
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
         PicAttribute picAttribute = new PicAttribute();

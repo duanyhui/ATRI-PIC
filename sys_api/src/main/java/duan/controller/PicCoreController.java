@@ -4,6 +4,7 @@ package duan.controller;
 import duan.common.Result;
 import duan.entity.PicCore;
 import duan.service.impl.PicCoreServiceImpl;
+import duan.service.impl.TagServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +37,13 @@ public class PicCoreController {
 
     @Autowired
     private PicCoreServiceImpl picCoreService;
+    @Autowired
+    private TagServiceImpl tagService;
+
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file,
-                         @RequestParam(value = "describe",required = false) String describe,
+                         @RequestParam(value = "info",required = false) String describe,
                          @RequestParam(value = "tags",required = false) List<String> tags) throws IOException {
         String fileType = file.getContentType();
         List<String> allowTypeList = Arrays.asList(allowType.split(","));
@@ -52,10 +56,18 @@ public class PicCoreController {
             throw new RuntimeException("文件名不合法");
         PicCore picCore = new PicCore();
         picCore.setInfo(describe);
-        picCoreService.upload(file,picCore);
+        Integer Pid = picCoreService.upload(file, picCore);
+        if(tags!=null){
+            tagService.setPicTags(Pid,tags);
+        }
 
 
         return Result.succ("上传成功");
     }
+
+
+
+
+
 }
 
