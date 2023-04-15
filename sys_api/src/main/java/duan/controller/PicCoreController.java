@@ -1,6 +1,7 @@
 package duan.controller;
 
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import duan.common.Result;
 import duan.entity.PicCore;
 import duan.service.impl.PicCoreServiceImpl;
@@ -16,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import static duan.constant.TokenConstant.USER_UPLOAD;
 
 /**
  * <p>
@@ -63,6 +66,12 @@ public class PicCoreController {
 
 
         return Result.succ("上传成功");
+    }
+
+    @GetMapping("/testPermission")
+    @SaCheckPermission(USER_UPLOAD)
+    public Result testPermission(){
+        return Result.succ("权限测试成功");
     }
 
 

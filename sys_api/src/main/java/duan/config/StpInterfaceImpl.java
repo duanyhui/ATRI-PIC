@@ -1,6 +1,7 @@
 package duan.config;
 
 import cn.dev33.satoken.stp.StpInterface;
+import cn.dev33.satoken.stp.StpUtil;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -19,12 +20,9 @@ public class StpInterfaceImpl implements StpInterface {
     public List<String> getPermissionList(Object loginId, String loginType) {
         // 本list仅做模拟，实际项目中要根据具体业务逻辑来查询权限
         List<String> list = new ArrayList<String>();
-        list.add("101");
-        list.add("user.add");
-        list.add("user.update");
-        list.add("user.get");
-        // list.add("user.delete");
-        list.add("art.*");
+        String token = StpUtil.getTokenValueByLoginId(loginId);
+
+        list = (List<String>) StpUtil.getExtra(token, "role");
         return list;
     }
 
