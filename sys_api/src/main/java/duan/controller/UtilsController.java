@@ -42,7 +42,6 @@ public class UtilsController {
         Map<String,String> map = new HashMap<>();
         map.put("token",tokenInfo.getTokenValue());
         map.put("uuid",uuid);
-//        map.put("tokenInfo",tokenInfo.toString());
         List<String> role = (List<String>) StpUtil.getExtra(tokenInfo.getTokenValue(), "role");
         List<String> roleList = StpUtil.getPermissionList(uuid);
         boolean b = StpUtil.hasPermission(uuid, USER_UPLOAD);

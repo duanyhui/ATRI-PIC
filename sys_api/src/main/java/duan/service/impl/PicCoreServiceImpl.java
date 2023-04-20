@@ -75,12 +75,19 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
         return picCore.getPid();
     }
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
-        PicAttribute picAttribute = new PicAttribute();
-        picAttribute.setPid(picCore.getPid());
-        picAttribute.setHeight(PicUtils.GetImageHeight(file));
-        picAttribute.setWidth(PicUtils.GetImageWidth(file));
-        picAttribute.setSize(PicUtils.GetImageSize(file));
-        picAttribute.setUpdatetime(LocalDateTime.now());
-        picAttributeMapper.insert(picAttribute);
+        try {
+            PicAttribute picAttribute = new PicAttribute();
+            picAttribute.setPid(picCore.getPid());
+            picAttribute.setHeight(PicUtils.GetImageHeight(file));
+            picAttribute.setWidth(PicUtils.GetImageWidth(file));
+            picAttribute.setSize(PicUtils.GetImageSize(file));
+            picAttribute.setUpdatetime(LocalDateTime.now());
+            picAttributeMapper.insert(picAttribute);
+        }
+        catch (Exception e){
+            throw new IOException("图片处理失败");
+        }
+
+
     }
 }

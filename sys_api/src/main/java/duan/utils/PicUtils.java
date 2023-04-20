@@ -62,9 +62,9 @@ public class PicUtils {
                 .size(width/2, height/2)
                 .outputQuality(thumbnailQualify)
                 .outputFormat("jpg")
-                .toFile(thumbnailPath+"\\thumbnail_"+filename);
+                .toFile(thumbnailPath+"thumbnail_"+filename);
         //计算缩略图大小
-        File thumbnailFile = new File(thumbnailPath+"\\thumbnail_"+filename+".jpg");
+        File thumbnailFile = new File(thumbnailPath+"thumbnail_"+filename+".jpg");
         int thumbnailSize = (int)thumbnailFile.length()/1024;
         //记录时间
         long end = System.currentTimeMillis();

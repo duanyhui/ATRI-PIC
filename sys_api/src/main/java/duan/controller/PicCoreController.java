@@ -2,9 +2,11 @@ package duan.controller;
 
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
 import duan.entity.PicCore;
 import duan.service.impl.PicCoreServiceImpl;
+import duan.service.impl.PicUpdateServiceImpl;
 import duan.service.impl.TagServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +44,21 @@ public class PicCoreController {
     private PicCoreServiceImpl picCoreService;
     @Autowired
     private TagServiceImpl tagService;
+    @Autowired
+    private PicUpdateServiceImpl picUpdateService;
 
 
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file,
                          @RequestParam(value = "info",required = false) String describe,
-                         @RequestParam(value = "tags",required = false) List<String> tags) throws IOException {
+                         @RequestParam(value = "tags",required = false) List<String> tags,
+                         @RequestParam(value = "name",required = false) String author_name,
+                         @RequestHeader(value = "satoken",required = false) String token) throws IOException {
+        if (token == null) {
+            logger.warn("未登录用户上传图片");
+            throw new RuntimeException("未登录用户上传图片");
+        }
+        String uuid = (String) StpUtil.getLoginId();
         String fileType = file.getContentType();
         List<String> allowTypeList = Arrays.asList(allowType.split(","));
 
@@ -63,6 +74,8 @@ public class PicCoreController {
         if(tags!=null){
             tagService.setPicTags(Pid,tags);
         }
+        picUpdateService.setPicUpdate(Pid,uuid,author_name);
+
 
 
         return Result.succ("上传成功");
