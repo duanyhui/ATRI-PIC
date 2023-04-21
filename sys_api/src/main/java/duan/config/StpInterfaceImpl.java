@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
+import static duan.constant.TokenConstant.USER_UPLOAD;
+
 /**
  * 自定义权限验证接口扩展
  */
@@ -21,7 +23,10 @@ public class StpInterfaceImpl implements StpInterface {
         // 本list仅做模拟，实际项目中要根据具体业务逻辑来查询权限
         List<String> list = new ArrayList<String>();
         String token = StpUtil.getTokenValueByLoginId(loginId);
-
+        if(loginId!=null&&token==null)
+        {
+            list.add(USER_UPLOAD);
+            return list;}
         list = (List<String>) StpUtil.getExtra(token, "role");
         return list;
     }

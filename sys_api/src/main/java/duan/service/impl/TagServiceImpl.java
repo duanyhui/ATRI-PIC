@@ -1,6 +1,7 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import duan.entity.PicCore;
 import duan.entity.PicTag;
 import duan.entity.Tag;
 import duan.mapper.PicTagMapper;
@@ -10,6 +11,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,5 +57,17 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements ITagS
             }
         }
 
+    public List<String> getTagsByPid(Integer pid) {
+        LambdaQueryWrapper<PicTag> picTagWrapper = new LambdaQueryWrapper();
+        picTagWrapper.eq(PicTag::getPicId,pid);
+        List<PicTag> picTags = picTagMapper.selectList(picTagWrapper);
+        List<String> tags = new ArrayList<>();
+        for(PicTag picTag:picTags){
+            LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper();
+            wrapper.eq(Tag::getId,picTag.getTagId());
+            tags.add(tagMapper.selectList(wrapper).get(0).getTagName());
+        }
+        return tags;
     }
+}
 

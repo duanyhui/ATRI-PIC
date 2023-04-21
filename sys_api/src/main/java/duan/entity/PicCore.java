@@ -50,5 +50,7 @@ public class PicCore implements Serializable {
       @ApiModelProperty("审核状态（默认不公开）ABLE/UNABLE/FORBID")
       private String status;
 
+      private String author;
+
 
 }

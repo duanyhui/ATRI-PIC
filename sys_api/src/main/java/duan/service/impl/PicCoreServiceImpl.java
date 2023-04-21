@@ -1,13 +1,13 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import duan.common.Result;
 import duan.entity.PicAttribute;
 import duan.entity.PicCore;
 import duan.mapper.PicAttributeMapper;
 import duan.mapper.PicCoreMapper;
 import duan.service.IPicCoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import duan.utils.MapUtils;
 import duan.utils.PicUtils;
 import duan.utils.UploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +20,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -74,6 +78,30 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
 
         return picCore.getPid();
     }
+
+    @Override
+    public List<Object> getrandPic(Integer num) {
+        List<Object> list = new ArrayList<>();
+        for (int i = 0; i < num; i++) {
+            Map<String, Object> map = new HashMap<>();
+            //随机获取一张图片
+            PicCore picCore = picCoreMapper.selectRandPic();
+            map = MapUtils.toMapByJson(picCore);
+            //获取图片标签
+            map.put("tags",tagService.getTagsByPid(picCore.getPid()));
+            list.add(map);
+//            list.add(picCoreMapper.selectRandPic());
+        }
+        return list;
+    }
+
+    @Override
+    public Map<String,Object> getPic(Integer pid) {
+        Map<String,Object> map = MapUtils.toMapByJson(picCoreMapper.selectById(pid));
+        map.put("tags",tagService.getTagsByPid(pid));
+        return map;
+    }
+
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
         try {
             PicAttribute picAttribute = new PicAttribute();

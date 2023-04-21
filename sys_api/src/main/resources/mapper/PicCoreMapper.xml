@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="duan.thesis_select_system.mapper.PicCoreMapper">
+<mapper namespace="duan.mapper.PicCoreMapper">
 
+    <select id="selectRandPic" resultType="duan.entity.PicCore">
+        SELECT * FROM pic_core
+                 WHERE status = 'ABLE'
+                 ORDER BY RAND() LIMIT 1
+    </select>
 </mapper>

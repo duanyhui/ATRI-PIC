@@ -5,6 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
 import duan.entity.PicCore;
+import duan.service.impl.PicCheckServiceImpl;
 import duan.service.impl.PicCoreServiceImpl;
 import duan.service.impl.PicUpdateServiceImpl;
 import duan.service.impl.TagServiceImpl;
@@ -46,6 +47,8 @@ public class PicCoreController {
     private TagServiceImpl tagService;
     @Autowired
     private PicUpdateServiceImpl picUpdateService;
+    @Autowired
+    private PicCheckServiceImpl picCheckService;
 
 
     @PostMapping("/upload")
@@ -70,11 +73,15 @@ public class PicCoreController {
             throw new RuntimeException("文件名不合法");
         PicCore picCore = new PicCore();
         picCore.setInfo(describe);
+        if(author_name==null)
+            author_name = "夏生";
+        picCore.setAuthor(author_name);
         Integer Pid = picCoreService.upload(file, picCore);
         if(tags!=null){
             tagService.setPicTags(Pid,tags);
         }
         picUpdateService.setPicUpdate(Pid,uuid,author_name);
+
 
 
 
@@ -85,6 +92,23 @@ public class PicCoreController {
     @SaCheckPermission(USER_UPLOAD)
     public Result testPermission(){
         return Result.succ("权限测试成功");
+    }
+
+    /**
+     * 获取随机已审核图片
+     * @param num
+     * @return
+     */
+    @GetMapping("/rand_pic")
+    public Result randPic(@RequestParam(value = "num",required = false,defaultValue = "1") Integer num){
+        if(num>10)
+            return Result.fail("num不能大于10");
+        return Result.succ(picCoreService.getrandPic(num));
+    }
+
+    @GetMapping("/get_pic")
+    public Result getPic(@RequestParam("pid") Integer pid){
+        return Result.succ(picCoreService.getPic(pid));
     }
 
 
