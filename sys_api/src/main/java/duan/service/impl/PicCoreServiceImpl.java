@@ -3,6 +3,7 @@ package duan.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import duan.entity.PicAttribute;
 import duan.entity.PicCore;
+import duan.entity.PicDetail_VO;
 import duan.mapper.PicAttributeMapper;
 import duan.mapper.PicCoreMapper;
 import duan.service.IPicCoreService;
@@ -86,6 +87,7 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
             Map<String, Object> map = new HashMap<>();
             //随机获取一张图片
             PicCore picCore = picCoreMapper.selectRandPic();
+
             map = MapUtils.toMapByJson(picCore);
             //获取图片标签
             map.put("tags",tagService.getTagsByPid(picCore.getPid()));

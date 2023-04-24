@@ -2,6 +2,9 @@ package duan.service;
 
 import duan.entity.PicCheck;
 import com.baomidou.mybatisplus.extension.service.IService;
+import duan.entity.PicDetail_VO;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPicCheckService extends IService<PicCheck> {
 
+    List<PicDetail_VO> getCheckPicList();
 }

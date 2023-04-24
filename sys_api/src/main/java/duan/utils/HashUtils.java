@@ -15,6 +15,6 @@ public class HashUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(SaSecureUtil.sha256("123456"));
+        System.out.println(SaSecureUtil.sha256("1"));
     }
 }

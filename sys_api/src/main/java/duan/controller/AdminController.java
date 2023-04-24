@@ -1,6 +1,7 @@
 package duan.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
+import cn.dev33.satoken.annotation.SaIgnore;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
@@ -17,17 +18,18 @@ import java.util.Map;
 import static duan.constant.TokenConstant.ADMIN;
 
 @RestController
-//@SaCheckPermission(ADMIN)
+@SaCheckPermission(ADMIN)
 @RequestMapping("/admin")
 public class AdminController {
     @Autowired
     private UserServiceImpl userService;
 
-    @SaCheckPermission(ADMIN)
+
     @GetMapping("/test")
     public String test() {
         return "权限测试成功";
     }
+    @SaIgnore
     @PostMapping("/login")
     public Result login(@RequestParam("username") String username,
                         @RequestParam("password") String password){

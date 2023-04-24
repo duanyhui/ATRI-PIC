@@ -25,7 +25,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public boolean login(String username, String password) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+
         wrapper.eq(User::getUsername,username);
+        if(userMapper.selectOne(wrapper)==null)
+            return false;
         String pwd = userMapper.selectOne(wrapper).getPwd();
         if(HashUtils.MatchHash(password,pwd))
             return true;

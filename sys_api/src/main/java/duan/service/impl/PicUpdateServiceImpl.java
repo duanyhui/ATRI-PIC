@@ -40,7 +40,7 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
         }
         PicUpdate picUpdate = new PicUpdate();
         picUpdate.setPid(pid);
-        picUpdate.setUuid(uuid);
+//        picUpdate.setUuid(uuid);
         picUpdateMapper.insert(picUpdate);
     }
 }
