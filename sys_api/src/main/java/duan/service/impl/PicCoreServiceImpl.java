@@ -22,7 +22,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -48,6 +47,8 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     private PicAttributeMapper picAttributeMapper;
     @Autowired
     private TagServiceImpl tagService;
+    @Autowired
+    private PicNumServiceImpl picNumService;
 
     /**
      *
@@ -81,27 +82,32 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     }
 
     @Override
-    public List<Object> getrandPic(Integer num) {
-        List<Object> list = new ArrayList<>();
+    public List<PicDetail_VO> getrandPic(Integer num) {
+        List<PicDetail_VO> list = new ArrayList<>();
         for (int i = 0; i < num; i++) {
-            Map<String, Object> map = new HashMap<>();
             //随机获取一张图片
-            PicCore picCore = picCoreMapper.selectRandPic();
+            PicDetail_VO picCore = picCoreMapper.selectRandPic();
 
-            map = MapUtils.toMapByJson(picCore);
+//            map = MapUtils.toMapByJson(picCore);
             //获取图片标签
-            map.put("tags",tagService.getTagsByPid(picCore.getPid()));
-            list.add(map);
+//            map.put("tags",tagService.getTagsByPid(picCore.getPid()));
+//            list.add(map);
 //            list.add(picCoreMapper.selectRandPic());
+              picCore.setTags(tagService.getTagsByPid(picCore.getPid()));
+              list.add(picCore);
+
         }
         return list;
     }
 
     @Override
-    public Map<String,Object> getPic(Integer pid) {
-        Map<String,Object> map = MapUtils.toMapByJson(picCoreMapper.selectById(pid));
-        map.put("tags",tagService.getTagsByPid(pid));
-        return map;
+    public PicDetail_VO getPic(Integer pid) {
+//        Map<String,Object> map = MapUtils.toMapByJson(picCoreMapper.selectById(pid));
+//        map.put("tags",tagService.getTagsByPid(pid));
+        PicDetail_VO picCore = picCoreMapper.selectByPid(pid);
+        picCore.setTags(tagService.getTagsByPid(pid));
+        picNumService.addSeeNum(pid);
+        return picCore;
     }
 
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {

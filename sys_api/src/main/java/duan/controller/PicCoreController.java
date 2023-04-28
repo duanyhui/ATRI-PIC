@@ -5,10 +5,7 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
 import duan.entity.PicCore;
-import duan.service.impl.PicCheckServiceImpl;
-import duan.service.impl.PicCoreServiceImpl;
-import duan.service.impl.PicUpdateServiceImpl;
-import duan.service.impl.TagServiceImpl;
+import duan.service.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,8 +46,11 @@ public class PicCoreController {
     private PicUpdateServiceImpl picUpdateService;
     @Autowired
     private PicCheckServiceImpl picCheckService;
+    @Autowired
+    private PicNumServiceImpl picNumService;
 
 
+    @SaCheckPermission(USER_UPLOAD)
     @PostMapping("/upload")
     public Result upload(@RequestParam("file") MultipartFile file,
                          @RequestParam(value = "info",required = false) String describe,
@@ -81,6 +81,7 @@ public class PicCoreController {
             tagService.setPicTags(Pid,tags);
         }
         picUpdateService.setPicUpdate(Pid,uuid,author_name);
+        picNumService.setPicNum(Pid);
 
 
 
@@ -111,6 +112,15 @@ public class PicCoreController {
         return Result.succ(picCoreService.getPic(pid));
     }
 
+    @PostMapping("/vote")
+    public Result vote(@RequestParam("pid") Integer pid,
+                       @RequestParam("vote") Integer vote){
+        // 不可冲投票或者取消投票
+        if(vote!=1&&vote!=-1)
+            return Result.fail("投票失败");
+        picNumService.vote(pid,vote);
+        return Result.succ("投票成功");
+    }
 
 
 

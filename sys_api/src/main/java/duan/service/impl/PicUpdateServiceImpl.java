@@ -31,6 +31,7 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
     public void setPicUpdate(Integer pid, String uuid,String name) {
         QueryWrapper<AnonymousUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid",uuid);
+        //如果没有匿名用户就创建一个
         if(anonymousUserMapper.selectList(queryWrapper).size()<1){
             AnonymousUser anonymousUser = new AnonymousUser();
             anonymousUser.setUuid(uuid);
@@ -40,7 +41,7 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
         }
         PicUpdate picUpdate = new PicUpdate();
         picUpdate.setPid(pid);
-//        picUpdate.setUuid(uuid);
+        picUpdate.setUuid(uuid);
         picUpdateMapper.insert(picUpdate);
     }
 }

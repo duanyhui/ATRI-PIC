@@ -5,10 +5,9 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import duan.common.Result;
 import duan.service.impl.PicCheckServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import java.util.List;
 
 import static duan.constant.TokenConstant.ADMIN;
 
@@ -29,6 +28,20 @@ public class PicCheckController {
     @GetMapping("/getCheckPicList")
     public Result getCheckPicList(){
         return Result.succ(picCheckService.getCheckPicList());
+    }
+    @PostMapping("/accept")
+    public Result checkPic(@RequestParam("pid") List<Integer> Pid){
+        for (Integer pid : Pid) {
+            picCheckService.acceptPic(pid);
+        }
+        return Result.succ("审核通过");
+    }
+    @PostMapping("/forbid")
+    public Result rejectPic(@RequestParam("pid") List<Integer> Pid){
+        for (Integer pid : Pid) {
+            picCheckService.forbidPic(pid);
+        }
+        return Result.succ("审核拒绝成功");
     }
 }
 

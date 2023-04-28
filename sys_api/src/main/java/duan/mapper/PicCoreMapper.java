@@ -2,6 +2,7 @@ package duan.mapper;
 
 import duan.entity.PicCore;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import duan.entity.PicDetail_VO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,5 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PicCoreMapper extends BaseMapper<PicCore> {
 
-    PicCore selectRandPic();
+    PicDetail_VO selectRandPic();
+
+    PicDetail_VO selectByPid(Integer pid);
 }

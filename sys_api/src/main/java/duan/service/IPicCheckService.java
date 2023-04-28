@@ -17,4 +17,8 @@ import java.util.List;
 public interface IPicCheckService extends IService<PicCheck> {
 
     List<PicDetail_VO> getCheckPicList();
+
+    void acceptPic(Integer pid);
+
+    void forbidPic(Integer pid);
 }

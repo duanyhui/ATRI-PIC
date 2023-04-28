@@ -20,4 +20,8 @@ import java.util.Map;
 public interface PicCheckMapper extends BaseMapper<PicCheck> {
 
     List<PicDetail_VO> getCheckPicList();
+
+    void acceptPic(Integer pid);
+
+    void forbidPic(Integer pid);
 }

@@ -3,6 +3,7 @@ package duan.service.impl;
 import duan.entity.PicCheck;
 import duan.entity.PicDetail_VO;
 import duan.mapper.PicCheckMapper;
+import duan.mapper.PicCoreMapper;
 import duan.service.IPicCheckService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
     private PicCheckMapper picCheckMapper;
     @Autowired
     private TagServiceImpl tagService;
+
     @Override
     public List<PicDetail_VO> getCheckPicList() {
         List<Object> list = new ArrayList<>();
@@ -36,5 +38,15 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
             picDetail_vo.setTags(tagList);
         }
         return checkPicList;
+    }
+
+    @Override
+    public void acceptPic(Integer pid) {
+        picCheckMapper.acceptPic(pid);
+    }
+
+    @Override
+    public void forbidPic(Integer pid) {
+        picCheckMapper.forbidPic(pid);
     }
 }

@@ -8,8 +8,8 @@ import java.util.List;
 @Data
 public class PicDetail_VO {
     private Integer pid;
-    @ApiModelProperty("文件名")
-    private String filename;
+//    @ApiModelProperty("文件名")
+//    private String filename;
 
     private String info;
 
@@ -27,5 +27,10 @@ public class PicDetail_VO {
 
     private String author;
     private List<String> tags;
+    private Integer likenum;
+
+    private Integer loadnum;
+
+    private Integer seenum;
 
 }
