@@ -26,6 +26,7 @@ public class PicNum implements Serializable {
       private Integer pid;
 
     private Integer likenum;
+    private Integer unlikenum;
 
     private Integer loadnum;
 

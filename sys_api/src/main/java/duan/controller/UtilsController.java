@@ -1,5 +1,6 @@
 package duan.controller;
 
+import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
@@ -48,9 +49,9 @@ public class UtilsController {
         return Result.succ(map);
     }
     @GetMapping("/hasPermission")
-public Result hasPermission(@RequestParam("uuid") String uuid) {
-        boolean b = StpUtil.hasPermission(uuid, USER_UPLOAD);
-        return Result.succ(b);
+    @SaCheckPermission(USER_UPLOAD)
+public Result hasPermission(@RequestParam("satoken") String token) {
+        return Result.succ(StpUtil.hasPermission(token, USER_UPLOAD));
     }
 
 }

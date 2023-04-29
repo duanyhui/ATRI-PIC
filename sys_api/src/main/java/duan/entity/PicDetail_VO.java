@@ -27,10 +27,14 @@ public class PicDetail_VO {
 
     private String author;
     private List<String> tags;
+    private Integer unlikenum;
+
     private Integer likenum;
 
     private Integer loadnum;
 
     private Integer seenum;
+
+
 
 }

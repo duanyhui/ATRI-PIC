@@ -23,4 +23,7 @@ public interface IPicCoreService extends IService<PicCore> {
     List<PicDetail_VO> getrandPic(Integer num);
 
     PicDetail_VO getPic(Integer pid);
+
+
+    List<PicDetail_VO> getByTag(String tag, Integer num);
 }

@@ -1,16 +1,18 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import duan.entity.PicAttribute;
-import duan.entity.PicCore;
-import duan.entity.PicDetail_VO;
+import duan.common.Result;
+import duan.entity.*;
 import duan.mapper.PicAttributeMapper;
 import duan.mapper.PicCoreMapper;
+import duan.mapper.TagMapper;
 import duan.service.IPicCoreService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.utils.MapUtils;
 import duan.utils.PicUtils;
 import duan.utils.UploadUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -35,7 +37,7 @@ import java.util.Map;
  */
 @Service
 public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> implements IPicCoreService {
-
+    private static final Logger logger = LoggerFactory.getLogger(PicCoreServiceImpl.class);
 
     @Value("${upload.path}")
     private String picPath;
@@ -49,6 +51,8 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     private TagServiceImpl tagService;
     @Autowired
     private PicNumServiceImpl picNumService;
+    @Autowired
+    private PicTagServiceImpl picTagService;
 
     /**
      *
@@ -76,6 +80,7 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
         picCore = picCoreMapper.selectOne(wrapper);
         SetPicAttribute(picCore,file);
         PicUtils.GenerateMiniImage(file,fileName);
+        logger.info("上传图片成功，图片pid为："+picCore.getPid()+"，图片名为："+picCore.getFilename());
 
 
         return picCore.getPid();
@@ -105,10 +110,46 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
 //        Map<String,Object> map = MapUtils.toMapByJson(picCoreMapper.selectById(pid));
 //        map.put("tags",tagService.getTagsByPid(pid));
         PicDetail_VO picCore = picCoreMapper.selectByPid(pid);
+        if (picCore == null){
+            throw new RuntimeException("图片不存在");
+        }
         picCore.setTags(tagService.getTagsByPid(pid));
         picNumService.addSeeNum(pid);
         return picCore;
     }
+
+    @Override
+    public List<PicDetail_VO> getByTag(String tag, Integer num) {
+        List<PicDetail_VO> list = new ArrayList<>();
+        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Tag::getTagName,tag);
+        Integer tagId = tagService.getOne(wrapper).getId();
+        LambdaQueryWrapper<PicTag> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(PicTag::getTagId,tagId);
+        long count = picTagService.count(wrapper1);
+        if(count == 0){
+            throw new RuntimeException("标签不存在");
+        }
+        // 如果请求的图片数量大于数据库中的图片数量，则返回数据库中的所有图片
+        if(count<num){
+            list=picCoreMapper.getAllPicByTag(tag);
+            for(PicDetail_VO picCore:list){
+                picCore.setTags(tagService.getTagsByPid(picCore.getPid()));
+            }
+            return list;
+        }
+        for (int i = 0; i < num; i++) {
+            //随机获取一张图片
+            PicDetail_VO picCore = picCoreMapper.selectRandPicByTag(tag);
+            if(picCore == null){
+                throw new RuntimeException("图片不存在");
+            }
+            picCore.setTags(tagService.getTagsByPid(picCore.getPid()));
+            list.add(picCore);
+        }
+        return list;
+    }
+
 
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
         try {
@@ -121,9 +162,12 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
             picAttributeMapper.insert(picAttribute);
         }
         catch (Exception e){
+            picCoreMapper.deleteById(picCore.getPid());
+            logger.error("图片处理失败");
             throw new IOException("图片处理失败");
         }
 
 
     }
+
 }

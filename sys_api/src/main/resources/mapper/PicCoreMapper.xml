@@ -13,4 +13,23 @@
                  WHERE pic_core.pid = pic_num.pid
                  AND pic_core.pid = #{pid}
     </select>
+    <select id="selectRandPicByTag" resultType="duan.entity.PicDetail_VO">
+        SELECT * FROM pic_core,pic_num,pic_tag,tag
+                 WHERE pic_core.pid = pic_num.pid
+                 AND status = 'ABLE'
+                 AND pic_core.pid = pic_tag.pic_id
+                 AND pic_tag.tag_id = tag.id
+                 AND tag.tag_name = #{tag}
+                 ORDER BY RAND() LIMIT 1
+    </select>
+    <select id="getAllPicByTag" resultType="duan.entity.PicDetail_VO">
+        SELECT * FROM pic_core,pic_num,pic_tag,tag
+                 WHERE pic_core.pid = pic_num.pid
+                 AND status = 'ABLE'
+                 AND pic_core.pid = pic_tag.pic_id
+                 AND pic_tag.tag_id = tag.id
+                 AND tag.tag_name = #{tag}
+    </select>
+
+
 </mapper>

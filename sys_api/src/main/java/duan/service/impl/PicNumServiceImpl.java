@@ -1,6 +1,7 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import duan.common.Result;
 import duan.entity.PicNum;
 import duan.mapper.PicNumMapper;
 import duan.service.IPicNumService;
@@ -34,10 +35,13 @@ public class PicNumServiceImpl extends ServiceImpl<PicNumMapper, PicNum> impleme
         LambdaQueryWrapper<PicNum> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(PicNum::getPid, pid);
         PicNum picNum = picNumMapper.selectOne(wrapper);
+        if(picNum == null){
+            throw new RuntimeException("图片不存在");
+        }
         if (vote == 1) {
             picNum.setLikenum(picNum.getLikenum() + 1);
         } else {
-            picNum.setLikenum(picNum.getLikenum() - 1);
+            picNum.setUnlikenum(picNum.getUnlikenum() + 1);
         }
         picNumMapper.update(picNum, wrapper);
     }
