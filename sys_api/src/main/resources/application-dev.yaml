@@ -7,16 +7,16 @@ spring:
 
   servlet:
     multipart:
-      max-request-size: 20MB
-      max-file-size: 20MB
+      max-request-size: 100MB
+      max-file-size: 100MB
 
 
 mybatis-plus:
   type-aliases-package: duan
   mapper-locations: classpath:mapper/*.xml
-  configuration:
+#  configuration:
     #输出到日志
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 server:
   # 端口
   port: 8082
@@ -27,11 +27,11 @@ server:
 
 # 自定义配置项
 upload:
-  path: C:\Users\31165\Desktop\大学相关文档\ATRI-PIC\upload         # 设置文件上传目录
-  thumbnail_path: C:\Users\31165\Desktop\大学相关文档\ATRI-PIC\upload\thumbnail  # 设置缩略图上传目录
-  thumbnail_quality: 1                                  # 设置缩略图质量
+  path: C:\Users\31165\Desktop\大学相关文档\ATRI-PIC\upload\         # 设置文件上传目录
+  thumbnail_path: C:\Users\31165\Desktop\大学相关文档\ATRI-PIC\upload\thumbnail\  # 设置缩略图上传目录
+  thumbnail_quality: 0.4                                  # 设置缩略图质量
   allow_type: "image/jpg,image/png,image/gif,image/jpeg"  # 设置允许上传的文件类型
-  local_perfix: "http:/localhost/pic/"                 # 设置本地访问前缀
+  local_perfix: "http://localhost/pic/"                 # 设置本地访问前缀
 
 
 
@@ -43,7 +43,7 @@ sa-token:
   # token名称 (同时也是cookie名称)
   token-name: satoken
   # token有效期，单位s 默认30天, -1代表永不过期
-  timeout: 2592000
+  timeout: 2592000000
   # token临时有效期 (指定时间内无操作就视为token过期) 单位: 秒
   activity-timeout: -1
   # 是否允许同一账号并发登录 (为true时允许一起登录, 为false时新登录挤掉旧登录)
