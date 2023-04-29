@@ -1,18 +1,19 @@
 <template>
-  <div className="image-list" ref="imageList">
+  <div class="image-list" ref="imageList">
     <image-item v-for="image in images" :key="image.pid" :pid="image.pid" :miniurl="image.miniurl"/>
-    <div v-if="isLoading" className="loading">
-      <i className="fas fa-spinner fa-spin"></i>
-    </div>
+    <div v-if="isLoading" class="loading">加载中...</div>
+    <BackToTop/>
   </div>
 </template>
 
 <script>
 import {getRandPic} from "../../api/pic_api";
 import ImageItem from "@/components/ImageItem.vue";
+import BackToTop from "@/components/BackToTop.vue";
 
 export default {
   components: {
+    BackToTop,
     "image-item": ImageItem,
   },
   data() {
@@ -52,19 +53,24 @@ export default {
 </script>
 
 <style scoped>
+img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .image-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 0 -20px;
+  margin: 0 -10px;
 }
 
 .image-item {
   min-width: 200px;
-  margin: 20px;
+  margin: 10px;
   padding: 10px;
-  background-color: #f4f4f4;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  background-color: transparent;
+  box-shadow: none;
   transition: transform 0.2s;
   overflow: hidden;
 }
@@ -78,27 +84,14 @@ export default {
   justify-content: center;
   align-items: center;
   height: 50px;
-}
-
-.loading i {
-  font-size: 2rem;
-  color: #333;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
+  font-size: 1.2rem;
+  color: #666;
 }
 
 @media screen and (max-width: 768px) {
   .image-item {
     width: 100%;
+    margin: 10px 0;
   }
 }
-
 </style>

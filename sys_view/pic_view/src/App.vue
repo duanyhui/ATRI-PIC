@@ -1,9 +1,10 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
+    <Navbar></Navbar>
+<!--    <nav>-->
+<!--      <router-link to="/">Home</router-link> |-->
+<!--      <router-link to="/about">About</router-link>-->
+<!--    </nav>-->
     <router-view/>
   </div>
 </template>
@@ -11,8 +12,10 @@
 <script>
 import axios from "axios";
 import {HasPermission} from "../api/user_api";
+import Navbar from "@/components/NavBar.vue";
 
 export default {
+  components: {Navbar},
   created() {
     if(localStorage.getItem('satoken')===null){
       axios.get('/utils/token').then(res => {

@@ -3,7 +3,10 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import axios from "axios";
+import '@fortawesome/fontawesome-free/css/all.css'
 
+
+Vue.component('font-awesome-icon');
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'http://192.168.66.102:8082';
