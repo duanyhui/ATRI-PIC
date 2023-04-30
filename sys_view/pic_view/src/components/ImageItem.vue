@@ -1,48 +1,70 @@
 <template>
-    <div class="image-item" @click="handleClick">
-        <img :src=this.miniurl alt="image" />
-    </div>
+  <div class="image-item" @click="handleClick">
+    <img :src="miniurl" alt="image" />
+  </div>
 </template>
 
 <script>
 import axios from "axios";
+import {votePic} from "../../api/pic_api";
 
 export default {
-    props: {
-        miniurl: {
-            type: String,
-            required: true
-        },
-        pid: {
-            type: Number,
-            required: true
-        }
-    },
-    methods: {
-        handleClick() {
-            this.$router.push(`/image/${this.pid}`);
-        },
-      getImageUrl(url) {
-          console.log("777"+url);
-        if(url.startsWith("http")) {
-          console.log("到达");
-          return url; // already a full URL
-        } else {
-          // prepend the base URL if it's not already included in the URL
-          return axios.defaults.baseURL + "/" + url;
-        }
-      }
+  components: {
 
+  },
+  props: {
+    miniurl: {
+      type: String,
+      required: true
     },
+    pid: {
+      type: Number,
+      required: true
+    }
+  },
+  data() {
+    return {
+    }
+  },
+  methods: {
+    handleClick() {
+      this.$router.push(`/art/${this.pid}`);
+    },
+  },
   created() {
-      // console.log("666"+this.miniurl);
   }
 };
 </script>
 
 <style scoped>
 img {
-    max-width: 100%;
-    height: auto;
+  max-width: 100%;
+  height: auto;
 }
+
+
+/*.vote-btn {*/
+/*  position: absolute;*/
+/*  bottom: 10px;*/
+/*  right: 10px;*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  width: 40px;*/
+/*  height: 40px;*/
+/*  background-color: rgba(255, 255, 255, 0.8);*/
+/*  border-radius: 50%;*/
+/*  box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.2);*/
+/*  cursor: pointer;*/
+/*  transition: transform 0.2s;*/
+/*}*/
+
+/*.vote-btn:hover {*/
+/*  transform: scale(1.1);*/
+/*}*/
+
+/*.iconfont {*/
+/*  font-size: 24px;*/
+/*  color: #888;*/
+/*}*/
 </style>

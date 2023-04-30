@@ -1,4 +1,5 @@
 <template>
+
   <div id="app">
     <Navbar></Navbar>
 <!--    <nav>-->
@@ -22,6 +23,7 @@ export default {
         console.log(res.data);
         localStorage.setItem('satoken', res.data.data.token);
         localStorage.setItem('uuid', res.data.data.uuid);
+        window.location.reload();
       })
     }
     else {
@@ -31,6 +33,8 @@ export default {
             console.log(res.data);
             localStorage.setItem('satoken', res.data.data.token);
             localStorage.setItem('uuid', res.data.data.uuid);
+            //reload
+            window.location.reload();
           })
         }
       })

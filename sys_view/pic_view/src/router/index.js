@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import test from "@/views/test.vue";
+import ImageDetail from "@/components/ImageDetail.vue";
 
 Vue.use(VueRouter)
 
@@ -11,6 +12,11 @@ const routes = [
   //   name: 'home',
   //   component: HomeView
   // },
+  {
+    path: '/art/:pid',
+    name: 'ImageDetail',
+    component: ImageDetail
+  },
   {
     path: '/about',
     name: 'about',

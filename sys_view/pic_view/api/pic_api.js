@@ -12,7 +12,21 @@ export function getRandPic(num){
 
 export function getPic(pid){
     return axios({
-        url: '/pic/{pid}',
-        method: 'GET'
+        url: '/pic/get',
+        method: 'GET',
+      params:{
+        pid: pid
+      }
+    })
+}
+
+export function votePic(pid, vote){
+    return axios({
+        url: '/pic/vote',
+        method: 'POST',
+        params:{
+            pid: pid,
+            vote: vote
+        }
     })
 }

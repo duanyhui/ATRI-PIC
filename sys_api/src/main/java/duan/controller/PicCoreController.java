@@ -111,8 +111,8 @@ public class PicCoreController {
         return Result.succ(picCoreService.getrandPic(num));
     }
 
-    @GetMapping("/get/{pid}")
-    public Result getPic(@PathVariable("pid") Integer pid){
+    @GetMapping("/get")
+    public Result getPic(@PathParam("pid") Integer pid){
         return Result.succ(picCoreService.getPic(pid));
     }
 

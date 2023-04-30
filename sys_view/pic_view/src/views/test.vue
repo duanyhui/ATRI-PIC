@@ -1,6 +1,6 @@
 <template>
   <div class="image-list" ref="imageList">
-    <image-item v-for="image in images" :key="image.pid" :pid="image.pid" :miniurl="image.miniurl"/>
+    <image-item v-for="image in images" :pid="image.pid" :miniurl="image.miniurl"/>
     <div v-if="isLoading" class="loading">加载中...</div>
     <BackToTop/>
   </div>
@@ -20,6 +20,7 @@ export default {
     return {
       images: [],
       isLoading: false,
+      requestCount: 0, // 添加计数器属性
     };
   },
   created() {
@@ -37,6 +38,17 @@ export default {
       getRandPic(20).then((res) => {
         this.images.push(...res.data.data);
         this.isLoading = false;
+        this.requestCount++; // 计数器加一
+        if (this.requestCount === 16){
+          //加大
+          this.$message({
+            message: "页面过大，即将刷新页面",
+            type: "warning",
+          });
+        }
+        if (this.requestCount >= 20) {
+          window.location.reload(); // 刷新页面
+        }
       });
     },
     handleScroll() {
@@ -44,7 +56,11 @@ export default {
       if (list && !this.isLoading) {
         const rect = list.getBoundingClientRect();
         if (rect.bottom <= window.innerHeight) {
-          this.loadImages();
+          const lastImage = list.lastChild;
+          const lastImageRect = lastImage.getBoundingClientRect();
+          if (lastImageRect.bottom <= window.innerHeight) {
+            this.loadImages();
+          }
         }
       }
     },
@@ -58,6 +74,7 @@ img {
   height: 100%;
   object-fit: cover;
 }
+
 .image-list {
   display: flex;
   flex-wrap: wrap;

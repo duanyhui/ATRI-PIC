@@ -1,26 +1,34 @@
 <template>
   <div class="navbar">
     <div class="navbar__center">
-      <form class="navbar__search-form">
+      <form class="navbar__search-form" v-if="isHome">
         <input type="text" class="navbar__search-input" placeholder="搜索...">
         <button type="submit" class="navbar__search-btn">
           <i class="fas fa-search"></i>
         </button>
       </form>
+      <router-link to="/" v-else class="navbar__home-btn">
+        <i class="fas fa-home"></i>
+      </router-link>
     </div>
     <div class="navbar__left">
       <a href="#" class="navbar__item">关于</a>
       <a href="#" class="navbar__item navbar__item--submit">投稿</a>
     </div>
-
   </div>
 </template>
 
 <script>
 export default {
   name: 'Navbar',
+  data() {
+    return {
+      isHome: true
+    }
+  },
   mounted() {
     window.addEventListener('scroll', this.handleScroll)
+    this.checkIfHome()
   },
   beforeDestroy() {
     window.removeEventListener('scroll', this.handleScroll)
@@ -31,6 +39,14 @@ export default {
       if (navbar) {
         navbar.classList.toggle('navbar--fixed', window.pageYOffset > 0)
       }
+    },
+    checkIfHome() {
+      this.isHome = this.$route.path === '/'
+    }
+  },
+  watch: {
+    $route() {
+      this.checkIfHome()
     }
   }
 }
@@ -64,8 +80,9 @@ export default {
 }
 
 .navbar__item {
-  margin: 0 10px;
-  font-size: 32px;
+  /*top: 10px;*/
+  margin: 5px 10px;
+  font-size: 20px;
   color: #333;
   text-decoration: none;
 }
@@ -112,4 +129,18 @@ export default {
   font-size: 18px;
   color: #333;
 }
+.navbar__home-btn {
+  font-size: 20px;
+  color: #333;
+  margin-left: 10px;
+  padding: 5px;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  transition: all 0.2s;
+}
+
+.navbar__home-btn:hover {
+  background-color: #e6e6e6;
+}
+
 </style>
