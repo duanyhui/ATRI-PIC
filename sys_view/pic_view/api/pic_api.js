@@ -30,3 +30,13 @@ export function votePic(pid, vote){
         }
     })
 }
+export function getPicByTag(tag, num){
+    return axios({
+        url: '/pic/getByTag',
+        method: 'GET',
+        params:{
+            tag: tag,
+            num: num
+        }
+    })
+}

@@ -120,7 +120,7 @@ public class PicCoreController {
     public Result vote(@RequestParam("pid") Integer pid,
                        @RequestParam("vote") Integer vote){
         // 不可冲投票或者取消投票
-        if(vote!=1&&vote!=-1)
+        if(vote!=1&&vote!=-1&&vote!=0)
             return Result.fail("投票失败");
         picNumService.vote(pid,vote);
         return Result.succ("投票成功");

@@ -2,10 +2,28 @@
   <div>
     <h2>{{ image.info }}</h2>
     <img :src="image.localurl" alt="image" />
-    <p>作者：{{ image.author }}</p>
-    <p>浏览量：{{ image.seenum }}</p>
+
+    <div class="image-info">
+      <div class="info-row">
+        <div class="info-label">作者：</div>
+        <div class="info-value">{{ image.author }}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">浏览量：</div>
+        <div class="info-value">{{ image.seenum }}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">更新时间：</div>
+        <div class="info-value">{{ image.updatetime }}</div>
+      </div>
+      <div class="info-row">
+        <div class="info-label">尺寸：</div>
+        <div class="info-value">{{ image.size }}KB</div>
+      </div>
+    </div>
 
     <div class="tag-list">
+      <div class="info-label">标签</div>
       <span v-for="(tag, index) in image.tags" :key="index" :class="`tag tag-${index % 5}`"
             @click="searchByTag(tag)">
         {{ tag }}
@@ -30,6 +48,7 @@ export default {
       required: false,
     },
   },
+
   data() {
     return {
       image: {
@@ -42,6 +61,8 @@ export default {
         loadnum: "",
         tags: [],
         filename: "",
+        updatetime: "",
+        size: "",
       },
       haslikenum: 0,
     };
@@ -68,6 +89,15 @@ export default {
       });
     },
     download(filename) {
+      votePic(this.image.pid, 0).then((res) => {
+        if (res.data.code === 200) {
+          this.$message({
+            message: "下载成功",
+            type: "success",
+          });
+          this.image.loadnum++;
+        }
+      });
       // 下载链接
       const downloadLink = document.createElement("a");
       downloadLink.href = this.image.localurl;
@@ -90,10 +120,12 @@ export default {
     },
   },
   created() {
-    // const pid = this.$route.params.pid;
+    const pid = this.$route.params.pid;
     // console.log(pid);
     getPic(pid).then((res) => {
       this.image = res.data.data;
+      //日期格式化，从2023-04-29T15:43:31.8到2023-04-29 15:43
+      this.image.updatetime = this.image.updatetime.replace("T", " ").substr(0, 16);
     });
   },
 };
@@ -103,6 +135,24 @@ export default {
 img {
   max-width: 100%;
   height: auto;
+}
+
+.image-info {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.info-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.info-label {
+  font-weight: bold;
+  margin-right: 10px;
 }
 
 .tag-list {

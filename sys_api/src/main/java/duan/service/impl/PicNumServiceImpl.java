@@ -40,8 +40,11 @@ public class PicNumServiceImpl extends ServiceImpl<PicNumMapper, PicNum> impleme
         }
         if (vote == 1) {
             picNum.setLikenum(picNum.getLikenum() + 1);
-        } else {
+        } else if (vote == -1){
             picNum.setUnlikenum(picNum.getUnlikenum() + 1);
+        }
+        else {
+            picNum.setLoadnum(picNum.getLoadnum() + 1);
         }
         picNumMapper.update(picNum, wrapper);
     }

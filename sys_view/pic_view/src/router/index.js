@@ -1,8 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import test from "@/views/test.vue";
+import test from "@/views/Home.vue";
 import ImageDetail from "@/components/ImageDetail.vue";
+import SearchByTag from "@/views/SearchByTag.vue";
+import Home from "@/views/Home.vue";
 
 Vue.use(VueRouter)
 
@@ -15,7 +17,9 @@ const routes = [
   {
     path: '/art/:pid',
     name: 'ImageDetail',
-    component: ImageDetail
+    component: ImageDetail,
+    props: true,
+    cache: true // 添加缓存属性
   },
   {
     path: '/about',
@@ -28,8 +32,13 @@ const routes = [
   {
     path: '/',
     name: 'test',
-    component: test
-  }
+    component: Home
+  },
+  {
+    path: "/search/:tag",
+    name: "search",
+    component: SearchByTag,
+  },
 
 ]
 

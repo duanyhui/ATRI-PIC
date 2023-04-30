@@ -9,8 +9,11 @@
                  ORDER BY RAND() LIMIT 1
     </select>
     <select id="selectByPid" resultType="duan.entity.PicDetail_VO">
-        SELECT * FROM pic_core,pic_num
+        SELECT * FROM pic_core,pic_num,pic_attribute
                  WHERE pic_core.pid = pic_num.pid
+                   AND pic_core.pid = pic_attribute.pid
+                   AND pic_num.pid = pic_attribute.pid
+                     AND status = 'ABLE'
                  AND pic_core.pid = #{pid}
     </select>
     <select id="selectRandPicByTag" resultType="duan.entity.PicDetail_VO">

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
-import store from './store'
+import store from './store/store'
 import axios from "axios";
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
@@ -15,6 +15,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 axios.defaults.baseURL = 'http://atri.wiki:2082';
+// axios.defaults.baseURL = 'http://localhost:2082';
 // 添加请求拦截器，在请求头中加token
 axios.interceptors.request.use(
   config => {

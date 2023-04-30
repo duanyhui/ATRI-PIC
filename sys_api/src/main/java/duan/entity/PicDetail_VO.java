@@ -3,6 +3,7 @@ package duan.entity;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -34,6 +35,8 @@ public class PicDetail_VO {
     private Integer loadnum;
 
     private Integer seenum;
+    private LocalDateTime updatetime;
+    private Integer size;
 
 
 

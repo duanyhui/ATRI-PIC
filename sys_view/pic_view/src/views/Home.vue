@@ -10,11 +10,15 @@
 import {getRandPic} from "../../api/pic_api";
 import ImageItem from "@/components/ImageItem.vue";
 import BackToTop from "@/components/BackToTop.vue";
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   components: {
     BackToTop,
     "image-item": ImageItem,
+  },
+  computed: {
+    ...mapState(['cachedImages']),
   },
   data() {
     return {
@@ -24,7 +28,11 @@ export default {
     };
   },
   created() {
-    this.loadImages();
+    if (this.$store.state.cachedImages.length === 0) {
+      this.loadImages();
+    } else {
+      this.images = this.$store.state.cachedImages;
+    }
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);
@@ -37,16 +45,18 @@ export default {
       this.isLoading = true;
       getRandPic(20).then((res) => {
         this.images.push(...res.data.data);
+        // this.$store.commit('setCachedImages', this.images);
+        console.log(this.$store.state.cachedImages);
         this.isLoading = false;
         this.requestCount++; // 计数器加一
-        if (this.requestCount === 16){
+        if (this.requestCount === 12){
           //加大
           this.$message({
             message: "页面过大，即将刷新页面",
             type: "warning",
           });
         }
-        if (this.requestCount >= 20) {
+        if (this.requestCount >= 15) {
           window.location.reload(); // 刷新页面
         }
       });
@@ -67,6 +77,10 @@ export default {
   },
 };
 </script>
+
+
+
+
 
 <style scoped>
 img {
