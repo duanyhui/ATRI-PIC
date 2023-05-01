@@ -16,4 +16,6 @@ import java.util.List;
 public interface ITagService extends IService<Tag> {
 
     void setPicTags(Integer pid, List<String> tags);
+
+    List<String> removeDuplicate(List<String> tags);
 }

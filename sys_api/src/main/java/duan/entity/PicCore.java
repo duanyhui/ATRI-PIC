@@ -52,5 +52,7 @@ public class PicCore implements Serializable {
 
       private String author;
 
+      private String source;
+
 
 }

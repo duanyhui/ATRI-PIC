@@ -57,6 +57,17 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements ITagS
             }
         }
 
+    @Override
+    public List<String> removeDuplicate(List<String> tags) {
+        List<String> new_tags = new ArrayList<>();
+        for(String tag:tags){
+            if(!new_tags.contains(tag)){
+                new_tags.add(tag);
+            }
+        }
+        return new_tags;
+    }
+
     public List<String> getTagsByPid(Integer pid) {
         LambdaQueryWrapper<PicTag> picTagWrapper = new LambdaQueryWrapper();
         picTagWrapper.eq(PicTag::getPicId,pid);

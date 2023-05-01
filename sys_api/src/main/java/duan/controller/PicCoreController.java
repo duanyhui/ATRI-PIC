@@ -58,11 +58,15 @@ public class PicCoreController {
                          @RequestParam(value = "info",required = false) String describe,
                          @RequestParam(value = "tags",required = false) List<String> tags,
                          @RequestParam(value = "author",required = false) String author_name,
+                         @RequestParam(value = "source",required = false) String source,
                          @RequestHeader(value = "satoken",required = false) String token) throws IOException {
         if (token == null) {
             logger.warn("未登录用户上传图片");
             throw new RuntimeException("未登录用户上传图片");
         }
+        //如果tag有重复，去重
+        if(tags!=null)
+            tags = tagService.removeDuplicate(tags);
         String uuid = (String) StpUtil.getLoginId();
         for(MultipartFile file:files) {
             //获取文件类型(后缀
@@ -76,6 +80,7 @@ public class PicCoreController {
             if (file.isEmpty() || file.getOriginalFilename() == null)
                 throw new RuntimeException("文件名不合法");
             PicCore picCore = new PicCore();
+            picCore.setSource(source);
             picCore.setInfo(describe);
             if (author_name == null)
                 author_name = "夏生";
