@@ -22,12 +22,15 @@
     <el-form-item label="来源" prop="source">
       <el-input v-model="form.source" placeholder="图片出处"></el-input>
     </el-form-item>
-    <el-form-item label="上传图片（一次最多1张）" prop="files" >
+    <el-form-item label="上传图片（一次最多10张）" prop="files" >
       <el-upload :model="files" :ref="form.file"
         action="https://jsonplaceholder.typicode.com/posts/"
         :auto-upload="false"
         :show-file-list="true"
+        :limit="10"
         :on-change="fileChange"
+        multiple
+        list-type="picture"
       >
         <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
@@ -53,15 +56,15 @@ export default {
         source: '',
         isAi: '',
       },
-      files:null,
+      files:[],
       rules: {
-        info: [{ required: true, message: '请输入标题', trigger: 'blur' }],
+        // info: [{ required: true, message: '请输入标题', trigger: 'blur' }],
         // tags: [{ required: true, type: 'array', min: 1, message: '请选择标签', trigger: 'change' }],
         isAi: [{ required: true, message: '是否AI', trigger: 'change' }],
         // author: [{ required: true, message: '留个名吧', trigger: 'blur' }],
         // source: [{ required: true, message: '', trigger: 'blur' }],
       },
-      tagList:['亚托莉','泳装'],
+      tagList:['亚托莉','表情包','泳装',],
       customTag: '',
     };
   },
@@ -83,67 +86,82 @@ export default {
       }
       console.log(this.form.tags);
     },
-    fileChange(file) {
+    fileChange(files) {
       const typeArr = ['image/png', 'image/gif', 'image/jpeg', 'image/jpg'];
-      const isJPG = typeArr.indexOf(file.raw.type) !== -1;
-      // image/png, image/jpeg, image/gif, image/jpg
-      const isLt10M = file.size / 1024 / 1024 < 30;
+      // console.log(files)
+        const file = files;
+        const isJPG = typeArr.indexOf(file.raw.type) !== -1;
+        const isLt10M = file.size / 1024 / 1024 < 30;
 
-      if (!isJPG) {
-        this.$message.error('只能是图片!');
-        this.files = null;
-        this.clearFiles();
-        return;
-      }
-      if (!isLt10M) {
-        this.$message.error('上传图片大小不能超过 30MB!');
-        this.files = null;
-        this.clearFiles();
-        return;
-      }
-      this.files = file.raw;
-      console.log(this.files);
+        if (!isJPG) {
+          this.$message.error('只能是图片!');
+          this.files = [];
+          this.clearFiles();
+          return;
+        }
+        if (!isLt10M) {
+          this.$message.error('上传图片大小不能超过 30MB!');
+          this.files = [];
+          this.clearFiles();
+          return;
+        }
+        // console.log("a" + this.files);
+        this.files.push(file.raw);
+        // console.log("aaa" + this.files);
     },
     submitForm() {
-      if(!this.files){
+      if (this.files.length === 0) {
         this.$message.error('请选择图片!');
         return;
       }
-      console.log(this.form);
 
       if (this.form.isAi === 'ai') {
+        const index = this.form.tags.indexOf('非ai');
+        if (index !== -1) {
+          this.form.tags.splice(index, 1);
+        }
         this.form.tags.push('ai');
       } else if (this.form.isAi === 'nonAi') {
+        const index = this.form.tags.indexOf('ai');
+        if (index !== -1) {
+          this.form.tags.splice(index, 1);
+        }
         this.form.tags.push('非ai');
       }
 
-      // 验证表单数据
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.$message({
+            message: '正在上传，请勿重复点击',
+            type: 'success'
+          });
           const formData = new FormData();
           Object.keys(this.form).forEach(key => {
             formData.append(key, this.form[key]);
           });
-          formData.append('file', this.files);
-          console.log(formData);
-          // 发送表单数据和图片文件给后端
-          upload(formData).then(res => {
-           if(res.data.code === 200){
-             this.$message({
-               message: '上传成功,通过审核后即可展示',
-               type: 'success'
-             });
+          for (let i = 0; i < this.files.length; i++) {
+            formData.append('file', this.files[i]);
           }
-           else {
-             this.$message({
-               message: res.data.msg,
-               type: 'error'
-             });
-           }
-      });
+
+          upload(formData).then(res => {
+            if (res.data.code === 200) {
+              this.$message({
+                message: '上传成功,通过审核后即可展示',
+                type: 'success'
+              });
+              this.files = [];
+            } else {
+              this.$message({
+                message: res.data.msg,
+                type: 'error'
+              });
+            }
+          });
         }
       });
     },
+
+
     clearFiles() {
       this.uploadFiles = [];
       this.uploadingFiles = [];
