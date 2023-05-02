@@ -9,6 +9,9 @@ import duan.mapper.AboutMapper;
 import duan.service.impl.AnonymousUserServiceImpl;
 import duan.utils.IpAddressUtils;
 import duan.utils.IpUtil;
+import duan.utils.PicUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +29,7 @@ import static duan.constant.TokenConstant.USER_UPLOAD;
 @RestController
 @RequestMapping("/utils")
 public class UtilsController {
+    private static final Logger logger = LoggerFactory.getLogger(UtilsController.class);
     @Autowired
     private AboutMapper aboutMapper;
     @Autowired
@@ -68,6 +72,7 @@ public Result hasPermission(@RequestParam("satoken") String token) {
 
     @GetMapping("/about")
     public Result about() {
+        logger.info("访问/about");
         return Result.succ(aboutMapper.selectOne(null).getAbout());
     }
 

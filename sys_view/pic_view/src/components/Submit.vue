@@ -22,12 +22,12 @@
     <el-form-item label="来源" prop="source">
       <el-input v-model="form.source" placeholder="图片出处"></el-input>
     </el-form-item>
-    <el-form-item label="上传图片（一次最多10张）" prop="files" >
+    <el-form-item label="上传图片（一次最多20张）" prop="files" >
       <el-upload :model="files" :ref="form.file"
         action="https://jsonplaceholder.typicode.com/posts/"
         :auto-upload="false"
         :show-file-list="true"
-        :limit="10"
+        :limit="20"
         :on-change="fileChange"
         multiple
         list-type="picture"
@@ -64,7 +64,7 @@ export default {
         // author: [{ required: true, message: '留个名吧', trigger: 'blur' }],
         // source: [{ required: true, message: '', trigger: 'blur' }],
       },
-      tagList:['亚托莉','表情包','泳装',],
+      tagList:['亚托莉','表情包','头像',],
       customTag: '',
     };
   },
@@ -91,7 +91,7 @@ export default {
       // console.log(files)
         const file = files;
         const isJPG = typeArr.indexOf(file.raw.type) !== -1;
-        const isLt10M = file.size / 1024 / 1024 < 30;
+        const isLt10M = file.size / 1024 / 1024 < 50;
 
         if (!isJPG) {
           this.$message.error('只能是图片!');
@@ -100,7 +100,7 @@ export default {
           return;
         }
         if (!isLt10M) {
-          this.$message.error('上传图片大小不能超过 30MB!');
+          this.$message.error('上传图片大小不能超过 50MB!');
           this.files = [];
           this.clearFiles();
           return;
@@ -149,12 +149,19 @@ export default {
                 message: '上传成功,通过审核后即可展示',
                 type: 'success'
               });
-              this.files = [];
+              //延迟2秒刷新页面
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
             } else {
               this.$message({
                 message: res.data.msg,
                 type: 'error'
               });
+              //延迟2秒刷新页面
+              setTimeout(() => {
+                window.location.reload();
+              }, 2000);
             }
           });
         }
@@ -162,13 +169,6 @@ export default {
     },
 
 
-    clearFiles() {
-      this.uploadFiles = [];
-      this.uploadingFiles = [];
-      this.uploadedFiles = [];
-      this.uploadList = [];
-      this.$refs.input.value = '';
-    }
   },
 };
 </script>

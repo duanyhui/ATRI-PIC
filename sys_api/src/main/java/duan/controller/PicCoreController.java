@@ -113,11 +113,13 @@ public class PicCoreController {
     public Result randPic(@RequestParam(value = "num",required = false,defaultValue = "1") Integer num){
         if(num>20)
             return Result.fail("num不能大于20");
+        logger.info("获取随机图片num:{}",num);
         return Result.succ(picCoreService.getrandPic(num));
     }
 
     @GetMapping("/get")
     public Result getPic(@PathParam("pid") Integer pid){
+        logger.info("获取图片pid:{}",pid);
         return Result.succ(picCoreService.getPic(pid));
     }
 
@@ -128,6 +130,7 @@ public class PicCoreController {
         if(vote!=1&&vote!=-1&&vote!=0)
             return Result.fail("投票失败");
         picNumService.vote(pid,vote);
+        logger.info("pid:{}投票成功",pid);
         return Result.succ("投票成功");
     }
     @GetMapping("/getByTag")
@@ -136,6 +139,7 @@ public class PicCoreController {
         if(num>30)
             return Result.fail("请求图片数量过多");
         List<PicDetail_VO> picDetail_vos = picCoreService.getByTag(tag,num);
+        logger.info("获取tag:{}的图片",tag);
         return Result.succ(picDetail_vos);
     }
 
