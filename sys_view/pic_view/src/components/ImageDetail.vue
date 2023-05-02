@@ -9,6 +9,10 @@
         <div class="info-value">{{ image.author }}</div>
       </div>
       <div class="info-row">
+        <div class="info-label">来源：</div>
+        <div class="info-value">{{ image.source }}</div>
+      </div>
+      <div class="info-row">
         <div class="info-label">浏览量：</div>
         <div class="info-value">{{ image.seenum }}</div>
       </div>
@@ -65,6 +69,7 @@ export default {
         updatetime: "",
         size: "",
         unlikenum: "",
+        source: "",
       },
       haslikenum: 0,
     };

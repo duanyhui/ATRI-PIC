@@ -56,5 +56,11 @@ public class PicCheckController {
         return Result.succ("删除成功");
     }
 
+    @PostMapping("/deleteAll")
+    public Result deleteAllPic(){
+        picCheckService.deleteAllPicNotCheck();
+        return Result.succ("全部删除成功");
+    }
+
 }
 

@@ -98,6 +98,13 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
         });
     }
 
+    @Override
+    public void deleteAllPicNotCheck() {
+        getCheckPicList().forEach(picDetail_vo -> {
+            deletePic(picDetail_vo.getPid());
+        });
+    }
+
     private void DeletePic(Integer pid, String fileName, String picPath) {
         String Path = picPath + fileName;
         //thumb文件都是以jpg结尾
