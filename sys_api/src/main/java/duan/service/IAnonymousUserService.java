@@ -3,6 +3,8 @@ package duan.service;
 import duan.entity.AnonymousUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * <p>
  *  服务类
@@ -13,4 +15,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IAnonymousUserService extends IService<AnonymousUser> {
 
+    void setAnonymousUser(String uuid, HttpServletRequest request);
 }

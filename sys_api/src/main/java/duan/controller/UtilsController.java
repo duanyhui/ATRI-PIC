@@ -6,6 +6,8 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
 import duan.mapper.AboutMapper;
+import duan.service.impl.AnonymousUserServiceImpl;
+import duan.utils.IpAddressUtils;
 import duan.utils.IpUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,8 @@ import static duan.constant.TokenConstant.USER_UPLOAD;
 public class UtilsController {
     @Autowired
     private AboutMapper aboutMapper;
+    @Autowired
+    private AnonymousUserServiceImpl anonymousUserService;
     @GetMapping("/uuid")
     public Result getUuid() {
         String uuid = java.util.UUID.randomUUID().toString();
@@ -38,7 +42,7 @@ public class UtilsController {
      * @return
      */
     @GetMapping("/token")
-    public Result getToken() {
+    public Result getToken(HttpServletRequest request) {
         String uuid = java.util.UUID.randomUUID().toString();
         List<String> list = new ArrayList<>();
         list.add(USER_UPLOAD);
@@ -51,7 +55,8 @@ public class UtilsController {
         map.put("uuid",uuid);
         List<String> role = (List<String>) StpUtil.getExtra(tokenInfo.getTokenValue(), "role");
         List<String> roleList = StpUtil.getPermissionList(uuid);
-        boolean b = StpUtil.hasPermission(uuid, USER_UPLOAD);
+//        boolean b = StpUtil.hasPermission(uuid, USER_UPLOAD);
+        anonymousUserService.setAnonymousUser(uuid, request);
 
         return Result.succ(map);
     }

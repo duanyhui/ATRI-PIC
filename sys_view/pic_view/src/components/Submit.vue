@@ -22,7 +22,7 @@
     <el-form-item label="来源" prop="source">
       <el-input v-model="form.source" placeholder="图片出处"></el-input>
     </el-form-item>
-    <el-form-item label="上传图片（一次最多5张）" prop="files" >
+    <el-form-item label="上传图片（一次最多1张）" prop="files" >
       <el-upload :model="files" :ref="form.file"
         action="https://jsonplaceholder.typicode.com/posts/"
         :auto-upload="false"
@@ -130,7 +130,7 @@ export default {
           upload(formData).then(res => {
            if(res.data.code === 200){
              this.$message({
-               message: '上传成功',
+               message: '上传成功,通过审核后即可展示',
                type: 'success'
              });
           }
