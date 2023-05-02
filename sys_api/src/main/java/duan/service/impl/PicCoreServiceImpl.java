@@ -39,8 +39,8 @@ import java.util.Map;
 public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> implements IPicCoreService {
     private static final Logger logger = LoggerFactory.getLogger(PicCoreServiceImpl.class);
 
-    @Value("${upload.path}")
-    private String picPath;
+    @Value("${upload.temp_path}")
+    private String temppicPath;
     @Value("${upload.local_perfix}")
     private String localPerfix;
     @Autowired
@@ -65,8 +65,8 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     public Integer upload(MultipartFile file, PicCore picCore) throws IOException {
         //生成随机文件名
         String fileName = UploadUtils.getRandomImgName(file.getOriginalFilename());
-        //本地上传
-        Path path = Paths.get(picPath,fileName);
+        //本地上传到temp文件夹
+        Path path = Paths.get(temppicPath,fileName);
         Files.write(path,file.getBytes());
         picCore.setFilename(fileName);
         picCore.setLocalurl(localPerfix+fileName);

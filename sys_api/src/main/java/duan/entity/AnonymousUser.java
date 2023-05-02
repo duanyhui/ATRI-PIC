@@ -36,5 +36,10 @@ public class AnonymousUser implements Serializable {
 
     private LocalDateTime createTime;
 
+    private String ip;
+    private String address;
+    private String browser;
+    private String os;
+
 
 }

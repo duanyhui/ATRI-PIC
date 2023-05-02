@@ -39,6 +39,10 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
             anonymousUser.setCreateTime(LocalDateTime.now());
             anonymousUserMapper.insert(anonymousUser);
         }
+        AnonymousUser anonymousUser = new AnonymousUser();
+        anonymousUser.setUuid(uuid);
+        anonymousUser.setName(name);
+        anonymousUserMapper.update(anonymousUser,queryWrapper);
         PicUpdate picUpdate = new PicUpdate();
         picUpdate.setPid(pid);
         picUpdate.setUuid(uuid);

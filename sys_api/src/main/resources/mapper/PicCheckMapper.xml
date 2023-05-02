@@ -10,9 +10,8 @@
 
 
     <select id="getCheckPicList" resultType="duan.entity.PicDetail_VO">
-        SELECT * FROM pic_core,tag,pic_tag
-        WHERE pic_core.pid = pic_tag.pic_id
-          AND pic_tag.tag_id = tag.id
-          AND pic_core.status = 'UNABLE'
+        SELECT * FROM pic_core
+        WHERE
+          pic_core.status = 'UNABLE'
     </select>
 </mapper>

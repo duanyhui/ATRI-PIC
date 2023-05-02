@@ -21,4 +21,8 @@ public interface IPicCheckService extends IService<PicCheck> {
     void acceptPic(Integer pid);
 
     void forbidPic(Integer pid);
+
+    void deletePic(Integer pid);
+
+    void acceptAllPic();
 }
