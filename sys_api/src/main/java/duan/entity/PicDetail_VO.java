@@ -38,6 +38,8 @@ public class PicDetail_VO {
     private LocalDateTime updatetime;
     private Integer size;
 
+    private String source;
+
 
 
 }

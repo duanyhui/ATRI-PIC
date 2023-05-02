@@ -34,6 +34,7 @@
       <el-button @click="download">下载（{{ image.loadnum }}）</el-button>
 
       <el-button type="primary" @click="voteClick">喜欢（{{ image.likenum }}）</el-button>
+      <el-button type="danger" @click="unLikeVoteClick">不喜欢（{{ image.unlikenum }}）</el-button>
     </div>
   </div>
 </template>
@@ -63,6 +64,7 @@ export default {
         filename: "",
         updatetime: "",
         size: "",
+        unlikenum: "",
       },
       haslikenum: 0,
     };
@@ -84,6 +86,25 @@ export default {
             type: "success",
           });
           this.image.likenum++;
+          this.haslikenum++;
+        }
+      });
+    },
+    unLikeVoteClick() {
+      if (this.haslikenum > 5) {
+        this.$message({
+          message: "大爷别点啦",
+          type: "warning",
+        });
+        return;
+      }
+      votePic(this.image.pid, -1).then((res) => {
+        if (res.data.code === 200) {
+          this.$message({
+            message: "投票成功",
+            type: "success",
+          });
+          this.image.unlikenum++;
           this.haslikenum++;
         }
       });

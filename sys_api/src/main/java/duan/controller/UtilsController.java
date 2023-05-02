@@ -5,11 +5,15 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
+import duan.mapper.AboutMapper;
+import duan.utils.IpUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +24,8 @@ import static duan.constant.TokenConstant.USER_UPLOAD;
 @RestController
 @RequestMapping("/utils")
 public class UtilsController {
+    @Autowired
+    private AboutMapper aboutMapper;
     @GetMapping("/uuid")
     public Result getUuid() {
         String uuid = java.util.UUID.randomUUID().toString();
@@ -46,12 +52,23 @@ public class UtilsController {
         List<String> role = (List<String>) StpUtil.getExtra(tokenInfo.getTokenValue(), "role");
         List<String> roleList = StpUtil.getPermissionList(uuid);
         boolean b = StpUtil.hasPermission(uuid, USER_UPLOAD);
+
         return Result.succ(map);
     }
     @GetMapping("/hasPermission")
     @SaCheckPermission(USER_UPLOAD)
 public Result hasPermission(@RequestParam("satoken") String token) {
         return Result.succ(StpUtil.hasPermission(token, USER_UPLOAD));
+    }
+
+    @GetMapping("/about")
+    public Result about() {
+        return Result.succ(aboutMapper.selectOne(null).getAbout());
+    }
+
+    @GetMapping("/test")
+    public Result test(HttpServletRequest request) {
+        return Result.succ(IpUtil.getIpAddr(request));
     }
 
 }

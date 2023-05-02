@@ -45,8 +45,8 @@ export default {
       this.isLoading = true;
       getRandPic(20).then((res) => {
         this.images.push(...res.data.data);
-        // this.$store.commit('setCachedImages', this.images);
-        console.log(this.$store.state.cachedImages);
+        this.$store.commit('setCachedImages', this.images);
+        // console.log(this.$store.state.cachedImages);
         this.isLoading = false;
         this.requestCount++; // 计数器加一
         if (this.requestCount === 12){

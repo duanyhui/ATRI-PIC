@@ -40,3 +40,22 @@ export function getPicByTag(tag, num){
         }
     })
 }
+
+export function getAboutMe(){
+    return axios({
+        url: '/utils/about',
+        method: 'GET'
+    })
+}
+export function upload(data){
+  //'Content-Type': 'multipart/form-data'
+
+    return axios({
+        url: '/pic/upload',
+      Headers:{
+        'Content-Type': 'multipart/form-data'
+      },
+        method: 'POST',
+        data: data
+    })
+}

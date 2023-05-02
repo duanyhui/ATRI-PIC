@@ -38,21 +38,31 @@ export default {
   methods: {
     loadImages() {
       this.isLoading = true;
-      getPicByTag(this.$route.params.tag, 20).then((res) => {
-        this.images.push(...res.data.data);
-        this.$store.commit('setCachedImages', this.images);
-        this.isLoading = false;
-        this.requestCount++;
-        if (this.requestCount === 16){
-          this.$message({
-            message: "页面过大，即将刷新页面",
-            type: "warning",
-          });
-        }
-        if (this.requestCount >= 15) {
-          window.location.reload(); // 刷新页面
-        }
-      });
+      getPicByTag(this.$route.params.tag, 20)
+        .then((res) => {
+          if(res.data.code === 400){
+            this.$message({
+              message: res.data.msg,
+              type: "warning",
+            });
+          }
+          // 正常返回
+          this.images.push(...res.data.data);
+          this.$store.commit('setCachedImages', this.images);
+          this.isLoading = false;
+          this.requestCount++;
+          if (this.requestCount === 16){
+            this.$message({
+              message: "页面过大，即将刷新页面",
+              type: "warning",
+            });
+          }
+          if (this.requestCount >= 15) {
+            window.location.reload(); // 刷新页面
+          }
+
+        })
+
     },
     handleScroll() {
       const list = this.$refs.imageList;

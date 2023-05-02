@@ -1,8 +1,8 @@
 <template>
   <div class="navbar">
     <div class="navbar__center">
-      <form class="navbar__search-form" v-if="isHome">
-        <input type="text" class="navbar__search-input" placeholder="搜索...">
+      <form class="navbar__search-form" v-if="isHome" @submit.prevent="search">
+        <input type="text" class="navbar__search-input" placeholder="搜索..." v-model="searchTag">
         <button type="submit" class="navbar__search-btn">
           <i class="fas fa-search"></i>
         </button>
@@ -12,18 +12,20 @@
       </router-link>
     </div>
     <div class="navbar__left">
-      <a href="#" class="navbar__item">关于</a>
-      <a href="#" class="navbar__item navbar__item--submit">投稿</a>
+      <router-link to="/about" class="navbar__item">关于</router-link>
+      <router-link to="/submit" class="navbar__item navbar__item--submit">投稿</router-link>
     </div>
   </div>
 </template>
+
 
 <script>
 export default {
   name: 'Navbar',
   data() {
     return {
-      isHome: true
+      isHome: true,
+      searchTag: ''
     }
   },
   mounted() {
@@ -42,6 +44,11 @@ export default {
     },
     checkIfHome() {
       this.isHome = this.$route.path === '/'
+    },
+    search() {
+      this.$store.commit('setCachedImages', [])
+      this.$router.push(`/search/${this.searchTag}`)
+      // 在这里，我们使用$router.push()方法来切换到/tag/:tag路径，其中:tag表示用户输入的标签
     }
   },
   watch: {

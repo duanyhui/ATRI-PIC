@@ -123,6 +123,9 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
         List<PicDetail_VO> list = new ArrayList<>();
         LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Tag::getTagName,tag);
+        if(tagService.getOne(wrapper)==null){
+            throw new RuntimeException("标签不存在");
+        }
         Integer tagId = tagService.getOne(wrapper).getId();
         LambdaQueryWrapper<PicTag> wrapper1 = new LambdaQueryWrapper<>();
         wrapper1.eq(PicTag::getTagId,tagId);
