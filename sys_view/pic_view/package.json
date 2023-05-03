@@ -18,8 +18,7 @@
     "vue": "^2.6.14",
     "vue-markdown": "^2.2.4",
     "vue-router": "^3.5.1",
-    "vuex": "^3.6.2",
-    "webpack": "^5.81.0"
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

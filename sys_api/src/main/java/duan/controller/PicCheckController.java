@@ -29,6 +29,10 @@ public class PicCheckController {
     public Result getCheckPicList(){
         return Result.succ(picCheckService.getCheckPicList());
     }
+    @GetMapping("/getAllPicList")
+    public Result getAllPicList(){
+        return Result.succ(picCheckService.getAllPicList());
+    }
     @PostMapping("/accept")
     public Result checkPic(@RequestParam("pid") List<Integer> Pid){
         for (Integer pid : Pid) {

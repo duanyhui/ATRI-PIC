@@ -27,4 +27,6 @@ public interface IPicCheckService extends IService<PicCheck> {
     void acceptAllPic();
 
     void deleteAllPicNotCheck();
+
+    List<PicDetail_VO> getAllPicList();
 }

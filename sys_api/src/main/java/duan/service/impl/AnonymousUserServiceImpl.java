@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -51,5 +52,13 @@ public class AnonymousUserServiceImpl extends ServiceImpl<AnonymousUserMapper, A
             anonymousUser.setCreateTime(LocalDateTime.now());
             anonymousUserMapper.insert(anonymousUser);
         }
+    }
+
+    @Override
+    public List<AnonymousUser> getUserInfoList() {
+        //按照id倒序
+        QueryWrapper<AnonymousUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.orderByDesc("uid");
+        return anonymousUserMapper.selectList(queryWrapper);
     }
 }

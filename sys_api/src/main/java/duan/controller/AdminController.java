@@ -6,6 +6,7 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
+import duan.service.impl.AnonymousUserServiceImpl;
 import duan.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +24,8 @@ import static duan.constant.TokenConstant.ADMIN;
 public class AdminController {
     @Autowired
     private UserServiceImpl userService;
+    @Autowired
+    private AnonymousUserServiceImpl AnonymousUserServiceImpl;
 
 
     @GetMapping("/test")
@@ -43,6 +46,11 @@ public class AdminController {
             return Result.succ(map);
         }
         return Result.fail("登录失败");
+    }
+
+    @GetMapping("/getUserInfoList")
+    public Result getUserInfoList(){
+        return Result.succ(AnonymousUserServiceImpl.getUserInfoList());
     }
 
 }

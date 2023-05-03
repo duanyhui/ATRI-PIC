@@ -4,6 +4,7 @@ import duan.entity.AnonymousUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * <p>
@@ -16,4 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 public interface IAnonymousUserService extends IService<AnonymousUser> {
 
     void setAnonymousUser(String uuid, HttpServletRequest request);
+
+    List<AnonymousUser> getUserInfoList();
 }

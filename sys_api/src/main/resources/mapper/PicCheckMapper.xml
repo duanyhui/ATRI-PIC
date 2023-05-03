@@ -14,4 +14,7 @@
         WHERE
           pic_core.status = 'UNABLE'
     </select>
+    <select id="getAllPicList" resultType="duan.entity.PicDetail_VO">
+        SELECT * FROM pic_core
+    </select>
 </mapper>

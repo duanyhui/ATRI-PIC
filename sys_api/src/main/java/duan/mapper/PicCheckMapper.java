@@ -24,4 +24,6 @@ public interface PicCheckMapper extends BaseMapper<PicCheck> {
     void acceptPic(Integer pid);
 
     void forbidPic(Integer pid);
+
+    List<PicDetail_VO> getAllPicList();
 }
