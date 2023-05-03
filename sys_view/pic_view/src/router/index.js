@@ -16,6 +16,8 @@ const routes = [
   //   name: 'home',
   //   component: HomeView
   // },
+
+
   {
     path: '/art/:pid',
     name: 'ImageDetail',
@@ -42,6 +44,12 @@ const routes = [
     path: '/about',
     name: 'About',
     component: About
+  },
+  //其他地址重定向到首页
+  {
+    path: '*',
+    redirect: '/'
+
   }
 
 ]

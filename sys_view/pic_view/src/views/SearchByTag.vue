@@ -1,6 +1,6 @@
 <template>
   <div class="image-list" ref="imageList">
-    <image-item v-for="image in images" :pid="image.pid" :miniurl="image.miniurl"/>
+    <image-item v-for="image in images" :pid="String(image.pid)" :miniurl="String(image.miniurl)"/>
     <div v-if="isLoading" class="loading">加载中...</div>
     <BackToTop/>
   </div>

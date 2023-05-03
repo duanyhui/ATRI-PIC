@@ -77,7 +77,7 @@ export default {
   mounted() {},
   methods: {
     voteClick() {
-      if (this.haslikenum > 5) {
+      if (this.haslikenum > 2) {
         this.$message({
           message: "大爷别点啦",
           type: "warning",
@@ -96,7 +96,7 @@ export default {
       });
     },
     unLikeVoteClick() {
-      if (this.haslikenum > 5) {
+      if (this.haslikenum > 2) {
         this.$message({
           message: "大爷别点啦",
           type: "warning",
@@ -139,6 +139,8 @@ export default {
       this.image.loadnum++;
     },
     searchByTag(tag) {
+      // this.$store.state.cachedImages = [];
+      this.$store.commit('setCachedImages', []);
       this.$router.push({
         name: "search",
         params: { tag: tag },

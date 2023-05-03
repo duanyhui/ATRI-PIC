@@ -1,6 +1,11 @@
 <template>
+
   <div class="image-list" ref="imageList">
-    <image-item v-for="image in images" :pid="image.pid" :miniurl="image.miniurl"/>
+    <h2>图片点击即可进入详情页</h2>
+    <h3>图片较少，可能会出现重复图片的情况，欢迎投稿</h3>
+    <h2>Tag是可以点击的</h2>
+    <h3>直接在贴吧里打开会出现无法投稿的问题，复制链接到浏览器打开即可解决</h3>
+    <image-item v-for="image in images" :pid="String(image.pid)" :miniurl="String(image.miniurl)"/>
     <div v-if="isLoading" class="loading">加载中...</div>
     <BackToTop/>
   </div>
@@ -49,14 +54,14 @@ export default {
         // console.log(this.$store.state.cachedImages);
         this.isLoading = false;
         this.requestCount++; // 计数器加一
-        if (this.requestCount === 12){
+        if (this.requestCount === 5){
           //加大
           this.$message({
             message: "页面过大，即将刷新页面",
             type: "warning",
           });
         }
-        if (this.requestCount >= 15) {
+        if (this.requestCount >= 8) {
           window.location.reload(); // 刷新页面
         }
       });

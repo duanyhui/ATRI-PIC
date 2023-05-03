@@ -18,7 +18,7 @@ export default {
       required: true
     },
     pid: {
-      type: Number,
+      type: String,
       required: true
     }
   },

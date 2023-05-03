@@ -2,6 +2,7 @@ package duan.handler;
 
 
 
+import cn.dev33.satoken.exception.NotLoginException;
 import duan.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,6 +66,13 @@ public class ControllerExceptionHandler {
 //		return Result.fail(e.getMessage());
 //	}
 
+
+	@ExceptionHandler(NotLoginException.class)
+	public Result notLoginExceptionHandler(HttpServletRequest request, NotLoginException e) {
+		logger.error("获取token失败");
+		logger.error("Request URL : {}, Exception :", request.getRequestURL());
+		return Result.fail( e.getMessage());
+	}
 	@ExceptionHandler(RuntimeException.class)
 	public Result runtimeExceptionHandler(HttpServletRequest request, RuntimeException e) {
 		logger.error("Request URL : {}, Exception :", request.getRequestURL(), e);
