@@ -6,7 +6,9 @@ import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
 import duan.entity.PicCore;
 import duan.entity.PicDetail_VO;
+import duan.handler.HeaderInterceptor;
 import duan.service.impl.*;
+import duan.utils.LogUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +52,10 @@ public class PicCoreController {
     private PicCheckServiceImpl picCheckService;
     @Autowired
     private PicNumServiceImpl picNumService;
+    @Autowired
+    private LogServiceImpl logService;
+    @Autowired
+    private LogUtils logUtils;
 
 
     @SaCheckPermission(USER_UPLOAD)
@@ -114,12 +120,15 @@ public class PicCoreController {
         if(num>20)
             return Result.fail("num不能大于20");
         logger.info("获取随机图片num:{}",num);
+        logUtils.urlLog("/rand", HeaderInterceptor.getSatoken());
         return Result.succ(picCoreService.getrandPic(num));
     }
 
     @GetMapping("/get")
     public Result getPic(@PathParam("pid") Integer pid){
         logger.info("获取图片pid:{}",pid);
+        String uuid = (String) StpUtil.getLoginId(StpUtil.getTokenValue());
+        logUtils.urlLog("/get/"+pid, HeaderInterceptor.getSatoken());
         return Result.succ(picCoreService.getPic(pid));
     }
 
@@ -131,6 +140,7 @@ public class PicCoreController {
             return Result.fail("投票失败");
         picNumService.vote(pid,vote);
         logger.info("pid:{}投票成功",pid);
+        logUtils.VoteLog(vote,pid, HeaderInterceptor.getSatoken());
         return Result.succ("投票成功");
     }
     @GetMapping("/getByTag")
@@ -139,6 +149,7 @@ public class PicCoreController {
         if(num>30)
             return Result.fail("请求图片数量过多");
         List<PicDetail_VO> picDetail_vos = picCoreService.getByTag(tag,num);
+        logUtils.urlLog("/getByTag/"+tag,HeaderInterceptor.getSatoken());
         logger.info("获取tag:{}的图片",tag);
         return Result.succ(picDetail_vos);
     }

@@ -8,6 +8,7 @@ import duan.mapper.PicUpdateMapper;
 import duan.service.IPicUpdateService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
     @Autowired
     private AnonymousUserMapper anonymousUserMapper;
     @Override
+    @Async
     public void setPicUpdate(Integer pid, String uuid,String name) {
         QueryWrapper<AnonymousUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid",uuid);

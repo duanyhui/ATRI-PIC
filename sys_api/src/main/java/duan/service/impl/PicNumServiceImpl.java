@@ -7,6 +7,7 @@ import duan.mapper.PicNumMapper;
 import duan.service.IPicNumService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,6 +24,7 @@ public class PicNumServiceImpl extends ServiceImpl<PicNumMapper, PicNum> impleme
     @Autowired
     private PicNumMapper picNumMapper;
     @Override
+    @Async
     public void setPicNum(Integer pid) {
         PicNum picNum = new PicNum();
         picNum.setPid(pid);

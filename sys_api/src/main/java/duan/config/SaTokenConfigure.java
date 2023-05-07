@@ -9,6 +9,8 @@ import cn.dev33.satoken.router.SaHttpMethod;
 import cn.dev33.satoken.router.SaRouter;
 import cn.dev33.satoken.stp.StpLogic;
 import cn.dev33.satoken.stp.StpUtil;
+import duan.handler.HeaderInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -18,6 +20,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class SaTokenConfigure implements WebMvcConfigurer {
 
     // Sa-Token 整合 jwt (Stateless 无状态模式)
+    @Autowired
+    private HeaderInterceptor headerInterceptor;
     @Bean
     public StpLogic getStpLogicJwt() {
         return new StpLogicJwtForMixin();
@@ -26,6 +30,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册 Sa-Token 拦截器，校验规则为 StpUtil.checkLogin() 登录校验。
+        registry.addInterceptor(headerInterceptor);
         registry.addInterceptor(new SaInterceptor()).addPathPatterns("/**");
         registry.addInterceptor(new SaInterceptor(handle -> StpUtil.checkLogin()))
                 .addPathPatterns("/**")
@@ -33,6 +38,7 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                 .excludePathPatterns(("/pic/upload"))
                 .excludePathPatterns(("/utils/*"))
                 .excludePathPatterns(("/admin/login"));
+
     }
 
 

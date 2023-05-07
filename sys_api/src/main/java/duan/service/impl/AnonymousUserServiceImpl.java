@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.utils.IpAddressUtils;
 import duan.utils.UserAgentUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class AnonymousUserServiceImpl extends ServiceImpl<AnonymousUserMapper, A
     private AnonymousUserMapper anonymousUserMapper;
 
     @Override
+    @Async
     public void setAnonymousUser(String uuid, HttpServletRequest request) {
         QueryWrapper<AnonymousUser> queryWrapper = new QueryWrapper<>();
         String ip = IpAddressUtils.getIpAddress(request);
