@@ -88,11 +88,11 @@ public Result hasPermission(@RequestParam("satoken") String token) {
         return Result.succ(IpUtil.getIpAddr(request));
     }
 
-//    @PostMapping("/setInfo")
-//    public Result setInfo(@RequestParam("url") String url,@RequestParam("uuid")String uuid) {
-//        new LogUtils ().urlLog(url);
-//        return Result.succ("操作成功");
-//    }
+    @PostMapping("/setUrlLog")
+    public Result setInfo(@RequestParam("url") String url) {
+        logUtils.urlLog(url, HeaderInterceptor.getSatoken());
+        return Result.succ("操作成功");
+    }
 
 
 

@@ -97,6 +97,7 @@ public class PicCoreController {
             }
             picUpdateService.setPicUpdate(Pid, uuid, author_name);
             picNumService.setPicNum(Pid);
+            logUtils.uploadLog(Pid, HeaderInterceptor.getSatoken());
         }
 
 

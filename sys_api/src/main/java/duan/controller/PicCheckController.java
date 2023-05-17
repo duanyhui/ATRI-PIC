@@ -34,7 +34,7 @@ public class PicCheckController {
         return Result.succ(picCheckService.getAllPicList());
     }
     @PostMapping("/accept")
-    public Result checkPic(@RequestParam("pid") List<Integer> Pid){
+    public Result checkPic(@RequestBody List<Integer> Pid){
         for (Integer pid : Pid) {
             picCheckService.acceptPic(pid);
         }
@@ -46,14 +46,14 @@ public class PicCheckController {
         return Result.succ("全部审核通过");
     }
     @PostMapping("/forbid")
-    public Result rejectPic(@RequestParam("pid") List<Integer> Pid){
+    public Result rejectPic(@RequestBody List<Integer> Pid){
         for (Integer pid : Pid) {
             picCheckService.forbidPic(pid);
         }
         return Result.succ("审核拒绝成功");
     }
     @PostMapping("/delete")
-    public Result deletePic(@RequestParam("pid") List<Integer> Pid){
+    public Result deletePic(@RequestBody() List<Integer> Pid){
         for (Integer pid : Pid) {
             picCheckService.deletePic(pid);
         }

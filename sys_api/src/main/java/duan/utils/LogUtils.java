@@ -42,4 +42,14 @@ public class LogUtils {
     private static String GetUuid(String token){
         return (String) StpUtil.getExtra(token,"uuid");
     }
+
+    @Async
+    public void uploadLog(Integer pid, String satoken) {
+        Log log = new Log();
+        log.setLog("上传pid："+pid);
+        log.setUuid(GetUuid(satoken));
+        log.setTime(LocalDateTime.now());
+        log.setType("UPLOAD");
+        logService.setLog(log);
+    }
 }

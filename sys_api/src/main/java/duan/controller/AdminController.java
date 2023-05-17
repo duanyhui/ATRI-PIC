@@ -7,6 +7,7 @@ import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
 import duan.service.impl.AnonymousUserServiceImpl;
+import duan.service.impl.LogServiceImpl;
 import duan.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +27,8 @@ public class AdminController {
     private UserServiceImpl userService;
     @Autowired
     private AnonymousUserServiceImpl AnonymousUserServiceImpl;
+    @Autowired
+    private LogServiceImpl logService;
 
 
     @GetMapping("/test")
@@ -51,6 +54,10 @@ public class AdminController {
     @GetMapping("/getUserInfoList")
     public Result getUserInfoList(){
         return Result.succ(AnonymousUserServiceImpl.getUserInfoList());
+    }
+    @GetMapping("/getLogList")
+    public Result getLogList(){
+        return Result.succ(logService.getLogList());
     }
 
 }
