@@ -15,6 +15,10 @@
           pic_core.status = 'UNABLE'
     </select>
     <select id="getAllPicList" resultType="duan.entity.PicDetail_VO">
-        SELECT * FROM pic_core
+        SELECT * FROM pic_core,pic_num,pic_attribute
+        WHERE
+          pic_core.pid = pic_num.pid
+          AND pic_core.pid = pic_attribute.pid
+
     </select>
 </mapper>
