@@ -22,12 +22,12 @@
     <el-form-item label="来源" prop="source">
       <el-input v-model="form.source" placeholder="图片出处"></el-input>
     </el-form-item>
-    <el-form-item label="上传图片（一次最多100张）" prop="files" >
+    <el-form-item label="上传图片（一次最多40张）" prop="files" >
       <el-upload :model="files" :ref="form.file"
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action=""
         :auto-upload="false"
         :show-file-list="true"
-        :limit="100"
+        :limit="1000"
         :on-change="fileChange"
         multiple
         list-type="picture"
@@ -42,6 +42,7 @@
 </template>
 <script>
 import {upload} from "../../api/pic_api";
+import {SetUrlLog} from "../../api/utils";
 
 
 export default {
@@ -64,7 +65,7 @@ export default {
         // author: [{ required: true, message: '留个名吧', trigger: 'blur' }],
         // source: [{ required: true, message: '', trigger: 'blur' }],
       },
-      tagList:['亚托莉','表情包','头像','弔图','游戏截图','CG原画'],
+      tagList:['亚托莉','表情包','头像','弔图','游戏截图','CG原画','插画'],
       customTag: '',
     };
   },
@@ -91,7 +92,7 @@ export default {
       // console.log(files)
         const file = files;
         const isJPG = typeArr.indexOf(file.raw.type) !== -1;
-        const isLt10M = file.size / 1024 / 1024 < 500;
+        const isLt10M = file.size / 1024 / 1024 < 20;
 
         if (!isJPG) {
           this.$message.error('只能是图片!');
@@ -100,7 +101,7 @@ export default {
           return;
         }
         if (!isLt10M) {
-          this.$message.error('上传图片大小不能超过 500MB!');
+          this.$message.error('上传图片大小不能超过 20MB!');
           this.files = [];
           this.clearFiles();
           return;
@@ -167,14 +168,18 @@ export default {
         }
       });
     },
-
-
+    setUrlLog() {
+      SetUrlLog("/upload")
+    },
   },
+  created() {
+    this.setUrlLog();
+  }
 };
 </script>
 <style>
 .my-form {
-  max-width: 600px;
+  /*max-width: 600px;*/
   margin: 0 auto;
 }
 .el-checkbox-group {

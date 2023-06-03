@@ -153,6 +153,67 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
         return list;
     }
 
+    @Override
+    public void addPicTag(String tag, Integer pid) {
+        //判断图片是否存在
+        if(picCoreMapper.selectById(pid)==null){
+            throw new RuntimeException("图片不存在");
+        }
+        //判断标签是否存在
+        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Tag::getTagName,tag);
+        if(tagService.getOne(wrapper)==null){
+            //标签不存在则创建标签
+            Tag tag1 = new Tag();
+            tag1.setTagName(tag);
+            tagService.save(tag1);
+        }
+        //获取标签id
+        Integer tagId = tagService.getOne(wrapper).getId();
+        //判断图片是否已经有该标签
+        LambdaQueryWrapper<PicTag> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(PicTag::getTagId,tagId);
+        wrapper1.eq(PicTag::getPicId,pid);
+        if(picTagService.getOne(wrapper1)!=null){
+            throw new RuntimeException("图片已经有该标签");
+        }
+        //添加图片标签
+        PicTag picTag = new PicTag();
+        picTag.setPicId(pid);
+        picTag.setTagId(tagId);
+        picTagService.save(picTag);
+    }
+
+    @Override
+    public void deletePicTag(String tag, Integer pid) {
+        //判断图片是否存在
+        if(picCoreMapper.selectById(pid)==null){
+            throw new RuntimeException("图片不存在");
+        }
+        //判断标签是否存在
+        LambdaQueryWrapper<Tag> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(Tag::getTagName,tag);
+        if(tagService.getOne(wrapper)==null){
+            throw new RuntimeException("标签不存在");
+        }
+        //获取标签id
+        Integer tagId = tagService.getOne(wrapper).getId();
+        //判断图片是否有该标签
+        LambdaQueryWrapper<PicTag> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(PicTag::getTagId,tagId);
+        wrapper1.eq(PicTag::getPicId,pid);
+        if(picTagService.getOne(wrapper1)==null){
+            throw new RuntimeException("图片没有该标签");
+        }
+        //删除图片标签
+        picTagService.remove(wrapper1);
+    }
+
+    @Override
+    public Long getPicCount() {
+        return picCoreMapper.selectCount(null);
+    }
+
 
     private void SetPicAttribute(PicCore picCore,MultipartFile file) throws IOException {
         try {

@@ -9,6 +9,7 @@ import AllPicList from "@/views/AllPicList.vue";
 import Blank from "@/components/Blank.vue";
 import UserInfoList from "@/views/UserInfoList.vue";
 import LogList from "@/views/LogList.vue";
+import OpPicTag from "@/views/OpPicTag.vue";
 
 Vue.use(VueRouter)
 
@@ -37,6 +38,11 @@ const routes = [
                     path: '/pic/list',
                     name: '图片列表',
                     component: AllPicList,
+                },
+                {
+                    path: '/pic/tag',
+                    name: '标签管理',
+                    component: OpPicTag,
                 }
                 ]
         },

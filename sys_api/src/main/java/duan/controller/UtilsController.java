@@ -10,6 +10,7 @@ import duan.handler.HeaderInterceptor;
 import duan.mapper.AboutMapper;
 import duan.service.impl.AnonymousUserServiceImpl;
 import duan.service.impl.LogServiceImpl;
+import duan.service.impl.PicCoreServiceImpl;
 import duan.utils.IpAddressUtils;
 import duan.utils.IpUtil;
 import duan.utils.LogUtils;
@@ -43,6 +44,8 @@ public class UtilsController {
     private AnonymousUserServiceImpl anonymousUserService;
     @Autowired
     private LogUtils logUtils;
+    @Autowired
+    private PicCoreServiceImpl picCoreService;
 
     @GetMapping("/uuid")
     public Result getUuid() {
@@ -92,6 +95,11 @@ public Result hasPermission(@RequestParam("satoken") String token) {
     public Result setInfo(@RequestParam("url") String url) {
         logUtils.urlLog(url, HeaderInterceptor.getSatoken());
         return Result.succ("操作成功");
+    }
+
+    @GetMapping("/getPicCount")
+    public Result getPicCount(){
+        return Result.succ(picCoreService.getPicCount());
     }
 
 

@@ -18,6 +18,8 @@
                     <span v-for="(item, index) in scope.row.tags" :key="index">{{ item }}、</span>
                 </template>
             </el-table-column>
+            <el-table-column prop="seenum" sortable label="浏览量"></el-table-column>
+            <el-table-column prop="likenum" sortable label="喜欢数"></el-table-column>
         </el-table>
         <el-button type="primary" @click="Forbid">禁止</el-button>
         <el-button type="primary" @click="Delete">删除</el-button>

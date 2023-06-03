@@ -26,4 +26,10 @@ public interface IPicCoreService extends IService<PicCore> {
 
 
     List<PicDetail_VO> getByTag(String tag, Integer num);
+
+    void addPicTag(String tag, Integer pid);
+
+    void deletePicTag(String tag, Integer pid);
+
+    Long getPicCount();
 }

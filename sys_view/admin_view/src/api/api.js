@@ -75,3 +75,24 @@ export function GetLogList(){
         method: 'GET',
     })
 }
+
+export function AddPicTag(pid,tag){
+    return axios({
+        url: '/tag/addPicTag',
+        method: 'POST',
+        params:{
+            pid:pid,
+            tag:tag
+        }
+    })
+}
+export function DeletePicTag(pid,tag){
+    return axios({
+        url: '/tag/deletePicTag',
+        method: 'POST',
+        params:{
+            pid:pid,
+            tag:tag
+        }
+    })
+}

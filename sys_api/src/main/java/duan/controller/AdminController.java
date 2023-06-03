@@ -6,9 +6,9 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
-import duan.service.impl.AnonymousUserServiceImpl;
-import duan.service.impl.LogServiceImpl;
-import duan.service.impl.UserServiceImpl;
+import duan.entity.PicCore;
+import duan.service.impl.*;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,6 +29,8 @@ public class AdminController {
     private AnonymousUserServiceImpl AnonymousUserServiceImpl;
     @Autowired
     private LogServiceImpl logService;
+    @Autowired
+    private PicCoreServiceImpl picCoreService;
 
 
     @GetMapping("/test")
@@ -59,5 +61,6 @@ public class AdminController {
     public Result getLogList(){
         return Result.succ(logService.getLogList());
     }
+
 
 }
