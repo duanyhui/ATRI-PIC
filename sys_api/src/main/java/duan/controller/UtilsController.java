@@ -4,7 +4,10 @@ import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import duan.common.Result;
+import duan.entity.About;
 import duan.entity.Log;
 import duan.handler.HeaderInterceptor;
 import duan.mapper.AboutMapper;
@@ -83,7 +86,9 @@ public Result hasPermission(@RequestParam("satoken") String token) {
     public Result about() {
         logger.info("访问/about");
         logUtils.urlLog("/about", HeaderInterceptor.getSatoken());
-        return Result.succ(aboutMapper.selectOne(null).getAbout());
+//        LambdaQueryWrapper<About> wrapper = new LambdaQueryWrapper<>();
+//        wrapper.eq(About::getId, 1);
+        return Result.succ(aboutMapper.selectById(1).getAbout());
     }
 
     @GetMapping("/test")
@@ -101,6 +106,12 @@ public Result hasPermission(@RequestParam("satoken") String token) {
     public Result getPicCount(){
         return Result.succ(picCoreService.getPicCount());
     }
+
+    @GetMapping("/HomeAbout")
+    public Result getHomeAbout(){
+        return Result.succ(aboutMapper.selectById(2).getAbout());
+    }
+
 
 
 

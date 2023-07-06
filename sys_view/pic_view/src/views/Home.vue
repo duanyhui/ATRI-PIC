@@ -1,10 +1,15 @@
 <template>
 
   <div class="image-list" ref="imageList">
-    <h2>图片点击即可进入详情页</h2>
-    <h3>图片较少，可能会出现重复图片的情况，欢迎投稿</h3>
-    <h2>Tag是可以点击的</h2>
-    <h3>直接在贴吧里打开会出现无法投稿的问题，复制链接到浏览器打开即可解决</h3>
+
+<!--    <span>当前图片总数：{{pic_num}}张</span><br>-->
+<!--    <span></span>-->
+<!--    <br><br>-->
+
+    <HomeAbout></HomeAbout>
+<!--    <h2>图片点击即可进入详情页</h2>-->
+<!--    <h3>图片较少，可能会出现重复图片的情况，欢迎投稿</h3>-->
+<!--    <h2>Tag是可以点击的</h2>-->
     <image-item v-for="image in images" :pid="String(image.pid)" :miniurl="String(image.miniurl)"/>
     <div v-if="isLoading" class="loading">加载中...</div>
     <BackToTop/>
@@ -12,13 +17,15 @@
 </template>
 
 <script>
-import {getRandPic} from "../../api/pic_api";
+import {getPicCount, getRandPic} from "../../api/pic_api";
 import ImageItem from "@/components/ImageItem.vue";
 import BackToTop from "@/components/BackToTop.vue";
 import { mapState, mapMutations } from 'vuex';
+import HomeAbout from "@/components/HomeAbout.vue";
 
 export default {
   components: {
+    HomeAbout,
     BackToTop,
     "image-item": ImageItem,
   },
@@ -30,6 +37,7 @@ export default {
       images: [],
       isLoading: false,
       requestCount: 0, // 添加计数器属性
+      pic_num: 0,
     };
   },
   created() {
@@ -38,6 +46,9 @@ export default {
     } else {
       this.images = this.$store.state.cachedImages;
     }
+    getPicCount().then((res) => {
+      this.pic_num = res.data.data;
+    });
   },
   mounted() {
     window.addEventListener("scroll", this.handleScroll);

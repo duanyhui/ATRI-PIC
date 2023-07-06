@@ -59,3 +59,9 @@ export function upload(data){
         data: data
     })
 }
+export function getPicCount(){
+  return axios({
+    url: '/utils/getPicCount',
+    method: 'GET'
+  })
+}

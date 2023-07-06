@@ -9,3 +9,10 @@ export function SetUrlLog(url){
   })
 }
 
+export function GetHomeAbout(){
+  return axios({
+    url: '/utils/HomeAbout',
+    method: 'GET'
+  })
+}
+
