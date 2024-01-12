@@ -11,6 +11,7 @@
             <el-table-column prop="info" label="标题"></el-table-column>
             <el-table-column prop="author" label="作者"></el-table-column>
             <el-table-column prop="source" label="来源"></el-table-column>
+            <el-table-column prop="mail" label="邮箱"></el-table-column>
             <el-table-column prop="tags" label="Tag">
                 <template slot-scope="scope">
                     <span v-for="(item, index) in scope.row.tags" :key="index">{{ item }}、</span>

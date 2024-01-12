@@ -13,5 +13,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IPicUpdateService extends IService<PicUpdate> {
 
-    void setPicUpdate(Integer pid, String uuid,String name);
+    void setPicUpdate(Integer pid, String uuid, String name, String mail);
 }

@@ -65,3 +65,11 @@ qiniu:
 
   # 空间里存储的文件名 不需要可以删除
   documentName: test/
+
+  # 发送邮件邮箱配置
+  mail:
+    sender-mail:   # 发件人邮箱
+    host: smtp.163.com                   # 发件邮箱主机
+    password:       # 发件邮箱密钥授权码
+    pichost: https://pic.atri.wiki  # 图片访问前缀
+

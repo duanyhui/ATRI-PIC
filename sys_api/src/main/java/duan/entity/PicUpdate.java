@@ -3,11 +3,12 @@ package duan.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -27,9 +28,11 @@ public class PicUpdate implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-      private String uuid;
+    private String uuid;
+    private Integer pid;
 
-      private Integer pid;
+    @ApiModelProperty("图片上传者的邮箱")
+    private String mail;
 
 
 }

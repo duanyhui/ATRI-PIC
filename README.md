@@ -2,9 +2,17 @@
 
 ## 基于Springboot+Vue2（~~+ChatGPT~~）
 
-[项目演示](https://pic.atri.wiki)
+## [项目演示地址](https://pic.atri.wiki)
+## 运行环境：JDK 1.8+、MySQL 5.7+、Node.js 10.0+
+## 七牛云存储暂时未配置
+### 项目结构
 
-项目未正式上线，使用frp内网穿透本地电脑，半夜可能无法访问
-
+```
+├─atri-pic
+│  ├─sys_api // 后端
+│  ├─sys_view 
+│  │  ├─admin_view // 管理员前端
+│  │  └─pic_view // 用户前端
+```
 
 

@@ -1,13 +1,18 @@
 package duan.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.entity.PicCheck;
 import duan.entity.PicCore;
 import duan.entity.PicDetail_VO;
+import duan.entity.PicUpdate;
 import duan.mapper.PicCheckMapper;
 import duan.mapper.PicCoreMapper;
+import duan.mapper.PicUpdateMapper;
 import duan.service.IPicCheckService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import duan.utils.RedisUtil;
+import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -16,7 +21,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -40,6 +44,11 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
     private TagServiceImpl tagService;
     @Autowired
     private PicCoreMapper picCoreMapper;
+    @Autowired
+    private PicUpdateMapper picUpdateMapper;
+    @Autowired
+    private RedisUtil redisUtil;
+
 
     @Override
     public List<PicDetail_VO> getCheckPicList() {
@@ -55,6 +64,11 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
     @Override
     public void acceptPic(Integer pid) {
         picCheckMapper.acceptPic(pid);
+        //邮件通知
+        //将该pid对应的uuid和mail存入redis
+        setMailInRedis(pid);
+
+
         //将temp文件夹中的图片移动到正式文件夹中
         String fileName = picCoreMapper.selectOne(new QueryWrapper<PicCore>().eq("pid", pid)).getFilename();
         String tempPath = temppicPath + fileName;
@@ -129,5 +143,46 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
 //            e.printStackTrace();
             throw new RuntimeException("删除失败");
         }
+    }
+
+
+
+    /**
+     * 将uuid和mail存入redis(key为uuid,value为UserMail对象)
+     * @param pid
+     */
+    void setMailInRedis(Integer pid) {
+        LambdaQueryWrapper<PicUpdate> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(PicUpdate::getPid, pid);
+        PicUpdate picUpdate = picUpdateMapper.selectOne(wrapper);
+        String uuid = picUpdate.getUuid();
+        String mail = picUpdate.getMail();
+
+        if (!mail.equals("")) {
+            UserMail userMail;
+
+            // 检查 Redis 中是否已存在该 UUID 的 UserMail
+            if (redisUtil.hHasKey("userMails", uuid)) {
+                // 获取并更新已存在的 UserMail
+                userMail = (UserMail) redisUtil.hget("userMails", uuid);
+                userMail.getPids().add(pid);
+            } else {
+                // 创建新的 UserMail 对象
+                userMail = new UserMail();
+                userMail.setUuid(uuid);
+                userMail.setMail(mail);
+                userMail.setPids(new ArrayList<>());
+                userMail.getPids().add(pid);
+            }
+
+            // 更新 Redis 中的数据
+            redisUtil.hset("userMails", uuid, userMail);
+        }
+    }
+    @Data
+    public static class UserMail{
+        private String uuid;
+        private String mail;
+        private List<Integer> pids;
     }
 }

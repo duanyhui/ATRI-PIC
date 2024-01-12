@@ -30,7 +30,7 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
     private AnonymousUserMapper anonymousUserMapper;
     @Override
     @Async
-    public void setPicUpdate(Integer pid, String uuid,String name) {
+    public void setPicUpdate(Integer pid, String uuid, String name, String mail) {
         QueryWrapper<AnonymousUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("uuid",uuid);
         //如果没有匿名用户就创建一个
@@ -48,6 +48,7 @@ public class PicUpdateServiceImpl extends ServiceImpl<PicUpdateMapper, PicUpdate
         PicUpdate picUpdate = new PicUpdate();
         picUpdate.setPid(pid);
         picUpdate.setUuid(uuid);
+        picUpdate.setMail(mail);
         picUpdateMapper.insert(picUpdate);
     }
 }

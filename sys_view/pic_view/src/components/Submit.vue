@@ -22,6 +22,9 @@
     <el-form-item label="来源" prop="source">
       <el-input v-model="form.source" placeholder="图片出处"></el-input>
     </el-form-item>
+    <el-form-item label="邮箱" prop="mail">
+      <el-input v-model="form.mail" placeholder="接收审核通过通知(不会在前台显示)"></el-input>
+    </el-form-item>
     <el-form-item label="上传图片（一次最多40张）" prop="files" >
       <el-upload :model="files" :ref="form.file"
         action=""
@@ -56,12 +59,16 @@ export default {
         author: '',
         source: '',
         isAi: '',
+        mail: '',
       },
       files:[],
       rules: {
         // info: [{ required: true, message: '请输入标题', trigger: 'blur' }],
         // tags: [{ required: true, type: 'array', min: 1, message: '请选择标签', trigger: 'change' }],
         isAi: [{ required: true, message: '是否AI', trigger: 'change' }],
+        mail: [
+          { type: 'email', message: '请输入有效的邮箱地址', trigger: ['blur', 'change'] }
+        ],
         // author: [{ required: true, message: '留个名吧', trigger: 'blur' }],
         // source: [{ required: true, message: '', trigger: 'blur' }],
       },
@@ -147,13 +154,13 @@ export default {
           upload(formData).then(res => {
             if (res.data.code === 200) {
               this.$message({
-                message: '上传成功,通过审核后即可展示，三秒后刷新界面',
+                message: '上传成功,通过审核后即可展示，五秒后刷新界面',
                 type: 'success'
               });
               //延迟2秒刷新页面
               setTimeout(() => {
                 window.location.reload();
-              }, 3000);
+              }, 5000);
             } else {
               this.$message({
                 message: res.data.msg,
@@ -162,7 +169,7 @@ export default {
               //延迟2秒刷新页面
               setTimeout(() => {
                 window.location.reload();
-              }, 2000);
+              }, 5000);
             }
           });
         }
@@ -192,4 +199,5 @@ export default {
 .el-input__suffix {
   cursor: pointer;
 }
+
 </style>

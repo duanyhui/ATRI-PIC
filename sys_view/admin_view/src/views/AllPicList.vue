@@ -11,6 +11,7 @@
             <el-table-column prop="info" label="标题"></el-table-column>
             <el-table-column prop="author" label="作者"></el-table-column>
             <el-table-column prop="source" label="来源"></el-table-column>
+            <el-table-column prop="mail" label="邮箱"></el-table-column>
             <el-table-column prop="updatetime" sortable label="上传时间"></el-table-column>
             <el-table-column prop="status" sortable label="状态"></el-table-column>
             <el-table-column prop="tags" label="Tag">

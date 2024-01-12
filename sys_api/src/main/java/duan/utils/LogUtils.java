@@ -52,4 +52,13 @@ public class LogUtils {
         log.setType("UPLOAD");
         logService.setLog(log);
     }
+
+    @Async
+    public void mailLog(Integer pid,String mail){
+        Log log = new Log();
+        log.setLog("发送pid："+pid+"到邮箱："+mail);
+        log.setTime(LocalDateTime.now());
+        log.setType("MAIL");
+        logService.setLog(log);
+    }
 }

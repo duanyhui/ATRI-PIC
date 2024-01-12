@@ -39,6 +39,7 @@ public class PicDetail_VO {
     private Integer size;
 
     private String source;
+    private String mail;
 
 
 

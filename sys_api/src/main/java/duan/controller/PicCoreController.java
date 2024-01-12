@@ -65,6 +65,7 @@ public class PicCoreController {
                          @RequestParam(value = "tags",required = false) List<String> tags,
                          @RequestParam(value = "author",required = false) String author_name,
                          @RequestParam(value = "source",required = false) String source,
+                         @RequestParam(value = "mail",required = false) String mail,
                          @RequestHeader(value = "satoken",required = false) String token) throws IOException {
         if (token == null) {
             logger.warn("未登录用户上传图片");
@@ -91,11 +92,15 @@ public class PicCoreController {
             if (author_name == null)
                 author_name = "夏生";
             picCore.setAuthor(author_name);
+            if (mail==null) {
+                mail = "";
+            }
+            picCore.setMail(mail);
             Integer Pid = picCoreService.upload(file, picCore);
             if (tags != null) {
                 tagService.setPicTags(Pid, tags);
             }
-            picUpdateService.setPicUpdate(Pid, uuid, author_name);
+            picUpdateService.setPicUpdate(Pid, uuid, author_name, mail);
             picNumService.setPicNum(Pid);
             logUtils.uploadLog(Pid, HeaderInterceptor.getSatoken());
         }
