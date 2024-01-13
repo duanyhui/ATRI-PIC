@@ -81,46 +81,48 @@ export default {
 };
 </script>
 <style scoped>
-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
+@import "../css/homeView.css";
+/*img {*/
+/*  width: 100%;*/
+/*  height: 100%;*/
+/*  object-fit: cover;*/
+/*}*/
 
-.image-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 0 -10px;
-}
+/*.image-list {*/
+/*  display: flex;*/
+/*  flex-wrap: wrap;*/
+/*  justify-content: center;*/
+/*  margin: 0 -10px;*/
+/*}*/
 
-.image-item {
-  min-width: 200px;
-  margin: 10px;
-  padding: 10px;
-  background-color: transparent;
-  box-shadow: none;
-  transition: transform 0.2s;
-  overflow: hidden;
-}
+/*.image-item {*/
+/*  min-width: 200px;*/
+/*  margin: 10px;*/
+/*  padding: 10px;*/
+/*  background-color: transparent;*/
+/*  box-shadow: none;*/
+/*  transition: transform 0.2s;*/
+/*  overflow: hidden;*/
+/*}*/
 
-.image-item:hover {
-  transform: translateY(-5px);
-}
+/*.image-item:hover {*/
+/*  transform: translateY(-5px);*/
+/*}*/
 
-.loading {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  font-size: 1.2rem;
-  color: #666;
-}
+/*.loading {*/
+/*  display: flex;*/
+/*  justify-content: center;*/
+/*  align-items: center;*/
+/*  height: 50px;*/
+/*  font-size: 1.2rem;*/
+/*  color: #666;*/
+/*}*/
 
-@media screen and (max-width: 768px) {
-  .image-item {
-    width: 100%;
-    margin: 10px 0;
-  }
-}
+/*@media screen and (max-width: 768px) {*/
+/*  .image-item {*/
+/*    width: 100%;*/
+/*    margin: 10px 0;*/
+/*  }*/
+/*}*/
+
 </style>

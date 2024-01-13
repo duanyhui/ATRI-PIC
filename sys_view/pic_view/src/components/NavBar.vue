@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar">
+  <div class="navbar" :class="{ 'navbar--fixed': isFixed }">
     <div class="navbar__center">
       <form class="navbar__search-form" v-if="isHome" @submit.prevent="search">
         <input type="text" class="navbar__search-input" placeholder="搜索..." v-model="searchTag">
@@ -25,7 +25,8 @@ export default {
   data() {
     return {
       isHome: true,
-      searchTag: ''
+      searchTag: '',
+      isFixed: false,
     }
   },
   mounted() {
@@ -36,11 +37,14 @@ export default {
     window.removeEventListener('scroll', this.handleScroll)
   },
   methods: {
+    // handleScroll() {
+    //   const navbar = document.querySelector('.navbar')
+    //   if (navbar) {
+    //     navbar.classList.toggle('navbar--fixed', window.pageYOffset > 0)
+    //   }
+    // },
     handleScroll() {
-      const navbar = document.querySelector('.navbar')
-      if (navbar) {
-        navbar.classList.toggle('navbar--fixed', window.pageYOffset > 0)
-      }
+      this.isFixed = window.pageYOffset > 0;
     },
     checkIfHome() {
       this.isHome = this.$route.path === '/'
@@ -49,7 +53,18 @@ export default {
       this.$store.commit('setCachedImages', [])
       this.$router.push(`/search/${this.searchTag}`)
       // 在这里，我们使用$router.push()方法来切换到/tag/:tag路径，其中:tag表示用户输入的标签
-    }
+    },
+    debounce(func, wait) {
+      let timeout;
+      return function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(func, wait);
+      }
+    },
+  },
+  created() {
+    window.addEventListener('scroll', this.debounce(this.handleScroll, 10));
+    // ... 其他代码保持不变
   },
   watch: {
     $route() {
@@ -148,6 +163,21 @@ export default {
 
 .navbar__home-btn:hover {
   background-color: #e6e6e6;
+}
+/* 合并 .navbar 和 .navbar--fixed 重复的样式 */
+.navbar,
+.navbar--fixed {
+  transition: all 0.2s;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.navbar--fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 </style>

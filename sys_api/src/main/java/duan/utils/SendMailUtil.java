@@ -84,7 +84,7 @@ public class SendMailUtil {
         // 设置消息体
         if(pids.size()==1) {
             Integer pid = pids.get(0);
-             text= "您好，您上传的id为" + pid + "的图片已通过审核！" + "\n" + "图片地址为：" + picHost + "/pic/" + pid;
+             text= "您好，您上传的id为" + pid + "的图片已通过审核！" + "\n" + "图片地址为：" + picHost + "/art/" + pid;
         }
         else {
             text = "您好，您上传的图片已通过审核！" + "\n" + "图片地址为：";

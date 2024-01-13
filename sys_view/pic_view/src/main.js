@@ -15,7 +15,8 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false
 
 // axios.defaults.baseURL = 'https://jd.atri.wiki';
-axios.defaults.baseURL = 'http://localhost:8082';
+axios.defaults.baseURL = 'http://atri.wiki:2082';
+// axios.defaults.baseURL = 'http://localhost:8082';
 // 添加请求拦截器，在请求头中加token
 axios.interceptors.request.use(
   config => {
