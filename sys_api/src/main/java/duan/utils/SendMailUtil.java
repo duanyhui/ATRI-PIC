@@ -32,8 +32,6 @@ public class SendMailUtil {
     private RedisUtil redisUtil;
     @Value("${mail.pichost}")
     public String picHost;
-    @Value("${mail.mailtime}")
-    public String mailTime;
     @Autowired
     private LogUtils logUtils;
 
