@@ -254,30 +254,30 @@ export default {
   }
 }
 
-.el-form-item__label {
-  font-size: 1rem; /* 使用相对单位 */
-  font-weight: bold;
-  color: #333;
-}
+/*.el-form-item__label {*/
+/*  font-size: 1rem; !* 使用相对单位 *!*/
+/*  font-weight: bold;*/
+/*  color: #333;*/
+/*}*/
 
-.el-input, .el-input__inner, .el-select, .el-radio__inner, .el-button {
-  border-radius: var(--border-radius);
-  height: var(--input-height);
-}
+/*.el-input, .el-input__inner, .el-select, .el-radio__inner, .el-button {*/
+/*  border-radius: var(--border-radius);*/
+/*  height: var(--input-height);*/
+/*}*/
 
-.el-button {
-  background-color: var(--button-color);
-  border-color: var(--button-color);
-  color: #fff;
-  padding: var(--form-padding) 20px;
-  margin-top: var(--form-padding);
-  transition: background-color 0.3s, border-color 0.3s;
-}
+/*.el-button {*/
+/*  background-color: var(--button-color);*/
+/*  border-color: var(--button-color);*/
+/*  color: #fff;*/
+/*  padding: var(--form-padding) 20px;*/
+/*  margin-top: var(--form-padding);*/
+/*  transition: background-color 0.3s, border-color 0.3s;*/
+/*}*/
 
-.el-button:hover {
-  background-color: var(--button-hover-color);
-  border-color: var(--button-hover-color);
-}
+/*.el-button:hover {*/
+/*  background-color: var(--button-hover-color);*/
+/*  border-color: var(--button-hover-color);*/
+/*}*/
 
 .el-checkbox-group {
   display: grid;
@@ -332,16 +332,6 @@ export default {
 .el-radio.is-checked .el-radio__label {
   color: var(--button-color); /* 选中状态的字体颜色 */
 }
-/* 当单选按钮组未选择时的样式 */
-.el-radio-group.is-required:not(.is-filled) .el-radio__input.is-focus .el-radio__inner,
-.el-radio-group.is-required:not(.is-filled) .el-radio__input:hover .el-radio__inner {
-  border-color: #ff4d4f; /* 未选择时的边框颜色 */
-}
-/* 当单选按钮组选择后的样式 */
-.el-radio-group.is-required.is-filled .el-radio__input .el-radio__inner {
-  border-color: var(--button-color); /* 选择后的边框颜色 */
-}
-
 .el-checkbox-group {
   display: flex; /* 使用flex布局 */
   flex-wrap: wrap; /* 允许子元素换行 */
@@ -356,8 +346,8 @@ export default {
 }
 
 .el-select .el-tag {
-  margin-right: 8px;
-  margin-bottom: 8px;
+  margin-right: 0;
+  margin-bottom: 0;
   flex-shrink: 0; /* 防止标签在容器太小的情况下被压缩 */
 }
 .el-form-item__label {
