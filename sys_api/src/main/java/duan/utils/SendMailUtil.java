@@ -32,6 +32,8 @@ public class SendMailUtil {
     private RedisUtil redisUtil;
     @Value("${mail.pichost}")
     public String picHost;
+    @Value("${mail.mailtime}")
+    public String mailTime;
     @Autowired
     private LogUtils logUtils;
 
@@ -103,7 +105,7 @@ public class SendMailUtil {
      * 定时发送邮件
      */
 
-    @Scheduled(fixedRate = 10000) // 每隔5秒执行一次
+    @Scheduled(fixedRate = 60000) // 每隔60秒检测一次redis中是否有待发送的邮件
     public void sendMail() {
 //        log.info("test");
         Map<Object, Object> userMails = redisUtil.hmget("userMails");

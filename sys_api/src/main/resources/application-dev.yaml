@@ -70,6 +70,7 @@ qiniu:
 mail:
   sender-mail: heiheiduan02@163.com   # 发件人邮箱
   host: smtp.163.com                   # 发件邮箱主机
-  password: UYPDIGARZZAKUDXT      # 发件邮箱密钥授权码
+  password: AAAAAAAAA      # 发件邮箱密钥授权码
   pichost: https://pic.atri.wiki  # 图片访问前缀
+  # mailtime: 60000       # 60秒检测一次redis中是否有待发送的邮件(在utils/SendMailUtil中修改sendMail方法的定时器时间)
 
