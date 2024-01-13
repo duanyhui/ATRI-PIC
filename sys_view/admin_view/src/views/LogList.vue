@@ -4,6 +4,8 @@
         <el-table ref="table" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
             <el-table-column prop="id" label="ID" sortable></el-table-column>
             <el-table-column prop="uuid" label="UUID"></el-table-column>
+            <el-table-column prop="ip" label="IP"></el-table-column>
+            <el-table-column prop="address" label="地区"></el-table-column>
             <el-table-column prop="log" label="log"></el-table-column>
             <el-table-column prop="url" label="URL" sortable></el-table-column>
             <el-table-column prop="time" label="时间" sortable></el-table-column>

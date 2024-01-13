@@ -40,6 +40,7 @@ public class PicDetail_VO {
 
     private String source;
     private String mail;
+    private String address;
 
 
 

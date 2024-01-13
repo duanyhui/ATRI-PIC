@@ -1,7 +1,9 @@
 package duan.mapper;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import duan.entity.Log;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import duan.entity.Log_VO;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
@@ -15,4 +17,5 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface LogMapper extends BaseMapper<Log> {
 
+    Page<Log_VO> getLogList(Page<Log_VO> page);
 }

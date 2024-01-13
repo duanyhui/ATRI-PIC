@@ -2,4 +2,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="duan.mapper.LogMapper">
 
+    <select id="getLogList" resultType="duan.entity.Log_VO">
+        SELECT * FROM log,anonymous_user
+        WHERE log.uuid = anonymous_user.uuid
+        ORDER BY log.id DESC
+    </select>
 </mapper>
