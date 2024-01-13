@@ -1,5 +1,6 @@
 package duan.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import duan.entity.PicCheck;
 import com.baomidou.mybatisplus.extension.service.IService;
 import duan.entity.PicDetail_VO;
@@ -28,5 +29,5 @@ public interface IPicCheckService extends IService<PicCheck> {
 
     void deleteAllPicNotCheck();
 
-    List<PicDetail_VO> getAllPicList();
+    Page<PicDetail_VO> getAllPicList(Integer currentPage, Integer pageSize);
 }

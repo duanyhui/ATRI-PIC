@@ -1,13 +1,13 @@
 package duan.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.entity.Log;
 import duan.mapper.LogMapper;
 import duan.service.ILogService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 /**
  * <p>
@@ -28,7 +28,11 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, Log> implements ILogS
     }
 
     @Override
-    public List<Log> getLogList() {
-        return logMapper.selectList(null);
+    public Page<Log> getLogList(Integer pageNum, Integer pageSize) {
+        LambdaQueryWrapper<Log> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.orderByDesc(Log::getId);
+        //输出递减的日志
+        Page<Log> page = new Page<>(pageNum,pageSize);
+        return logMapper.selectPage(page,queryWrapper);
     }
 }

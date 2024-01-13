@@ -2,6 +2,7 @@ package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.entity.PicCheck;
 import duan.entity.PicCore;
@@ -120,13 +121,23 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
     }
 
     @Override
-    public List<PicDetail_VO> getAllPicList() {
-        List<PicDetail_VO> allPicList = picCheckMapper.getAllPicList();
-        for (PicDetail_VO picDetail_vo : allPicList) {
+    public Page<PicDetail_VO> getAllPicList(Integer currentPage, Integer pageSize) {
+//        List<PicDetail_VO> allPicList = picCheckMapper.getAllPicList();
+//        for (PicDetail_VO picDetail_vo : allPicList) {
+//            List<String> tagList = tagService.getTagsByPid(picDetail_vo.getPid());
+//            picDetail_vo.setTags(tagList);
+//        }
+//        return allPicList;
+
+        //2024-1-13 重写分页查询
+        Page<PicDetail_VO> page = new Page<>(currentPage, pageSize);
+        Page<PicDetail_VO> allPicPage = picCheckMapper.getAllPicList(page);
+        // 遍历分页结果，为每个PicDetail_VO对象设置标签
+        for (PicDetail_VO picDetail_vo : allPicPage.getRecords()) {
             List<String> tagList = tagService.getTagsByPid(picDetail_vo.getPid());
             picDetail_vo.setTags(tagList);
         }
-        return allPicList;
+        return allPicPage;
     }
 
     private void DeletePic(Integer pid, String fileName, String picPath) {

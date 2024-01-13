@@ -1,9 +1,8 @@
 package duan.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import duan.entity.Log;
 import com.baomidou.mybatisplus.extension.service.IService;
-
-import java.util.List;
 
 /**
  * <p>
@@ -17,5 +16,5 @@ public interface ILogService extends IService<Log> {
 
     void setLog(Log log);
 
-    List<Log> getLogList();
+    Page<Log> getLogList(Integer pageNum, Integer pageSize);
 }

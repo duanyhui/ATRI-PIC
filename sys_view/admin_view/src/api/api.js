@@ -48,10 +48,14 @@ export function DeleteAllUnCheckPic() {
     })
 }
 
-export function GetPicList() {
+export function GetPicList(pageNum, pageSize) {
     return axios({
         url: '/picCheck/getAllPicList',
         method: 'GET',
+        params: {
+            pageNum: pageNum,
+            pageSize: pageSize
+        }
     })
 }
 
@@ -63,16 +67,24 @@ export function ForbidPic(pids) {
         data: pids
     })
 }
-export function GetUserInfoList(){
+export function GetUserInfoList(pageNum,pageSize){
     return axios({
         url: '/admin/getUserInfoList',
         method: 'GET',
+        params:{
+            pageNum:pageNum,
+            pageSize:pageSize
+        }
     })
 }
-export function GetLogList(){
+export function GetLogList(pageNum,pageSize){
     return axios({
         url: '/admin/getLogList',
         method: 'GET',
+        params:{
+            pageNum:pageNum,
+            pageSize:pageSize
+        }
     })
 }
 

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <el-table ref="table" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+        <el-table ref="table" :data="tableData" style="width: 100%" >
             <el-table-column type="selection"></el-table-column>
             <el-table-column prop="pid" sortable label="PID"></el-table-column>
             <el-table-column label="图片">
@@ -22,8 +22,29 @@
             <el-table-column prop="seenum" sortable label="浏览量"></el-table-column>
             <el-table-column prop="likenum" sortable label="喜欢数"></el-table-column>
         </el-table>
-        <el-button type="primary" @click="Forbid">禁止</el-button>
-        <el-button type="primary" @click="Delete">删除</el-button>
+<!--        <el-button type="primary" @click="Forbid">禁止</el-button>-->
+<!--        <el-button type="primary" @click="Delete">删除</el-button>-->
+        <div class="pageselect">
+            <el-button type="primary" @click="Forbid">禁止</el-button>
+            <el-button type="primary" @click="Delete">删除</el-button>
+            <!-- PageSize Selector -->
+            <el-select v-model="pageSize" placeholder="选择每页数量" @change="handleSizeChange">
+                <el-option
+                    v-for="item in sizeOptions"
+                    :key="item"
+                    :label="item + ' 条/页'"
+                    :value="item">
+                </el-option>
+            </el-select>
+            <!-- Pagination -->
+            <el-pagination
+                @current-change="handlePageChange"
+                :current-page="currentPage"
+                :page-size="pageSize"
+                layout="prev, pager, next"
+                :total="total">
+            </el-pagination>
+        </div>
     </div>
 </template>
 
@@ -35,23 +56,27 @@ export default {
     data() {
         return {
             tableData: [],
-            selectedPids: []
+            selectedPids: [],
+            total: 0,
+            currentPage: 1,
+            pageSize: 20,
+            sizeOptions: [5, 10, 15, 20, 50, 100, 500, 1000, 5000],  // Options for page size
         }
     },
     created() {
-        this.getData()
+        this.getData(this.currentPage, this.pageSize)
     },
-    methods:{
-        getData() {
-            GetPicList().then((res) => {
-                this.tableData = res.data.data
-                for(let i = 0; i < this.tableData.length; i++){
-                    this.tableData[i].updatetime = this.tableData[i].updatetime.replace("T", " ").substr(0, 16);
+    methods: {
+        getData(page, pageSize) {
+            GetPicList(page, pageSize).then((res) => {
+                this.total = res.data.data.total;
+                this.tableData = res.data.data.records;
+                for (let i = 0; i < this.tableData.length; i++) {
+                    this.tableData[i].createTime = this.tableData[i].createTime.replace("T", " ").substr(0, 16);
                 }
-
             })
         },
-        Delete(){
+        Delete() {
             //传一个pid数组
             DeletePic(this.selectedPids).then((res) => {
                 if (res.data.code === 200) {
@@ -68,7 +93,7 @@ export default {
                 }
             })
         },
-        Forbid(){
+        Forbid() {
             //传一个pid数组
             ForbidPic(this.selectedPids).then((res) => {
                 if (res.data.code === 200) {
@@ -91,12 +116,35 @@ export default {
             for (let i = 0; i < selections.length; i++) {
                 this.selectedPids.push(selections[i].pid)
             }
-        }
+        },
+        handlePageChange(page) {
+            this.currentPage = page;
+            this.getData(this.currentPage, this.pageSize);
+        },
+        handleSizeChange(newSize) {
+            this.pageSize = newSize;
+            this.currentPage = 1; // 重置为第一页
+            this.getData(this.currentPage, this.pageSize);
+        },
+
     }
 
 }
 </script>
 
 <style scoped>
+.pageselect {
+    position: fixed; /* 或者使用 position: sticky; */
+    bottom: 0; /* 控制距离底部的距离 */
+    left: 0; /* 控制距离左侧的距离 */
+    width: 100%; /* 控制宽度 */
+    background: white; /* 背景颜色 */
+    padding: 10px; /* 内边距 */
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+}
+.el-table{
+    margin-bottom: 70px; /* 根据分页控件的高度来调整这个值 */
+}
+
 
 </style>

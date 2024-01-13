@@ -19,6 +19,6 @@
         WHERE
           pic_core.pid = pic_num.pid
           AND pic_core.pid = pic_attribute.pid
-
+          ORDER BY pic_core.pid DESC
     </select>
 </mapper>

@@ -30,8 +30,9 @@ public class PicCheckController {
         return Result.succ(picCheckService.getCheckPicList());
     }
     @GetMapping("/getAllPicList")
-    public Result getAllPicList(){
-        return Result.succ(picCheckService.getAllPicList());
+    public Result getAllPicList(@RequestParam(defaultValue = "1") Integer pageNum,
+                                @RequestParam(defaultValue = "10") Integer pageSize){
+        return Result.succ(picCheckService.getAllPicList(pageNum,pageSize));
     }
     @PostMapping("/accept")
     public Result checkPic(@RequestBody List<Integer> Pid){

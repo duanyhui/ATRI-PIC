@@ -1,10 +1,10 @@
 package duan.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import duan.entity.AnonymousUser;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 /**
  * <p>
@@ -18,5 +18,5 @@ public interface IAnonymousUserService extends IService<AnonymousUser> {
 
     void setAnonymousUser(String uuid, HttpServletRequest request);
 
-    List<AnonymousUser> getUserInfoList();
+    Page<AnonymousUser> getUserInfoList(Integer pageNum, Integer pageSize);
 }

@@ -6,9 +6,10 @@ import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
-import duan.entity.PicCore;
-import duan.service.impl.*;
-import io.swagger.models.auth.In;
+import duan.service.impl.AnonymousUserServiceImpl;
+import duan.service.impl.LogServiceImpl;
+import duan.service.impl.PicCoreServiceImpl;
+import duan.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,12 +55,14 @@ public class AdminController {
     }
 
     @GetMapping("/getUserInfoList")
-    public Result getUserInfoList(){
-        return Result.succ(AnonymousUserServiceImpl.getUserInfoList());
+    public Result getUserInfoList(@RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
+                                  @RequestParam(value = "pageSize" ,defaultValue = "20") Integer pageSize){
+        return Result.succ(AnonymousUserServiceImpl.getUserInfoList(pageNum,pageSize));
     }
     @GetMapping("/getLogList")
-    public Result getLogList(){
-        return Result.succ(logService.getLogList());
+    public Result getLogList(@RequestParam(value = "pageNum",defaultValue = "1") Integer pageNum,
+                             @RequestParam(value = "pageSize" ,defaultValue = "20") Integer pageSize){
+        return Result.succ(logService.getLogList(pageNum,pageSize));
     }
 
 

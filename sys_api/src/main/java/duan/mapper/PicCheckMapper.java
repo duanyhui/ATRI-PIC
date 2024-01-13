@@ -1,12 +1,12 @@
 package duan.mapper;
 
-import duan.entity.PicCheck;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import duan.entity.PicCheck;
 import duan.entity.PicDetail_VO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -25,5 +25,6 @@ public interface PicCheckMapper extends BaseMapper<PicCheck> {
 
     void forbidPic(Integer pid);
 
-    List<PicDetail_VO> getAllPicList();
+//    List<PicDetail_VO> getAllPicList();
+    Page<PicDetail_VO> getAllPicList(Page<?> page);
 }

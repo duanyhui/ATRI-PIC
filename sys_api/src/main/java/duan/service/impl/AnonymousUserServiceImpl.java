@@ -1,6 +1,7 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import duan.entity.AnonymousUser;
 import duan.mapper.AnonymousUserMapper;
 import duan.service.IAnonymousUserService;
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,10 +57,11 @@ public class AnonymousUserServiceImpl extends ServiceImpl<AnonymousUserMapper, A
     }
 
     @Override
-    public List<AnonymousUser> getUserInfoList() {
+    public Page<AnonymousUser> getUserInfoList(Integer pageNum, Integer pageSize) {
         //按照id倒序
         QueryWrapper<AnonymousUser> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByDesc("uid");
-        return anonymousUserMapper.selectList(queryWrapper);
+        Page<AnonymousUser> page = new Page<>(pageNum,pageSize);
+        return anonymousUserMapper.selectPage(page,queryWrapper);
     }
 }
