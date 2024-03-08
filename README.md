@@ -1,5 +1,6 @@
 
 # ATRI 图片维基
+## [项目演示地址](https://pic.atri.wiki)
 
 > 基于 Springboot + Vue2 的图片收集网站
 
@@ -31,7 +32,6 @@
 - 上CDN加快图片加载速度
 - 图库去重
 
-## [项目演示地址](https://pic.atri.wiki)
 ## 运行环境：JDK 1.8、MySQL 5.6、Node.js 10.0+、Redis
 ## 七牛云存储暂时未配置
 ### 项目结构
