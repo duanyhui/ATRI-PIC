@@ -24,7 +24,7 @@ public class RedisUtil {
      *
      * @return
      */
-    void del(String key) {
+    public void del(String key) {
         redisTemplate.delete(key);
     }
     /**
@@ -608,6 +608,40 @@ public class RedisUtil {
      */
     public void convertAndSend(String channel, Object message) {
         redisTemplate.convertAndSend(channel, message);
+    }
+
+    public void Zadd(String key, String member, double score) {
+        redisTemplate.opsForZSet().add(key, member, score);
+    }
+    public void Zdel(String key, String member) {
+        redisTemplate.opsForZSet().remove(key, member);
+    }
+    /**
+     * 增加排行榜分数
+     */
+    public void zIncrScore(String key, String member, double score) {
+        redisTemplate.opsForZSet().incrementScore(key, member, score);
+    }
+
+    /**
+     * 获取排行榜
+     */
+    public Set<Object> zGetTop(String key, long start, long end) {
+        return redisTemplate.opsForZSet().reverseRange(key, start, end);
+    }
+
+    /**
+     * 获取成员当前排名（0为第一名）
+     */
+    public Long zGetRank(String key, String member) {
+        return redisTemplate.opsForZSet().reverseRank(key, member);
+    }
+
+    /**
+     * 获取成员当前分数
+     */
+    public Double zGetScore(String key, String member) {
+        return redisTemplate.opsForZSet().score(key, member);
     }
 }
 

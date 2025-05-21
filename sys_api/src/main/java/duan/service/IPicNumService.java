@@ -3,6 +3,8 @@ package duan.service;
 import duan.entity.PicNum;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -19,4 +21,6 @@ public interface IPicNumService extends IService<PicNum> {
     void vote(Integer pid, Integer vote);
 
     void addSeeNum(Integer pid);
+
+    List<PicNum> getAllPicNumList();
 }

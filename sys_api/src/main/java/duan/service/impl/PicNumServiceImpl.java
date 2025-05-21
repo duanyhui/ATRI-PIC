@@ -1,14 +1,15 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import duan.common.Result;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.entity.PicNum;
 import duan.mapper.PicNumMapper;
 import duan.service.IPicNumService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -23,6 +24,8 @@ public class PicNumServiceImpl extends ServiceImpl<PicNumMapper, PicNum> impleme
 
     @Autowired
     private PicNumMapper picNumMapper;
+    @Autowired
+    private PicRankService picRankService;
     @Override
     @Async
     public void setPicNum(Integer pid) {
@@ -42,8 +45,10 @@ public class PicNumServiceImpl extends ServiceImpl<PicNumMapper, PicNum> impleme
         }
         if (vote == 1) {
             picNum.setLikenum(picNum.getLikenum() + 1);
+            picRankService.likePic(pid);
         } else if (vote == -1){
             picNum.setUnlikenum(picNum.getUnlikenum() + 1);
+            picRankService.unlikePic(pid);
         }
         else {
             picNum.setLoadnum(picNum.getLoadnum() + 1);
@@ -54,5 +59,13 @@ public class PicNumServiceImpl extends ServiceImpl<PicNumMapper, PicNum> impleme
     @Override
     public void addSeeNum(Integer pid) {
         picNumMapper.addSeeNum(pid);
+        picRankService.seePic(pid);
     }
+    @Override
+    public List<PicNum> getAllPicNumList() {
+        LambdaQueryWrapper<PicNum> wrapper = new LambdaQueryWrapper<>();
+        //获取所有的图片
+        return picNumMapper.selectList(wrapper);
+    }
+
 }

@@ -56,6 +56,8 @@ public class PicCoreController {
     private LogServiceImpl logService;
     @Autowired
     private LogUtils logUtils;
+    @Autowired
+    private PicRankService picRankService;
 
 
     @SaCheckPermission(USER_UPLOAD)
@@ -97,6 +99,8 @@ public class PicCoreController {
             }
             picCore.setMail(mail);
             Integer Pid = picCoreService.upload(file, picCore);
+            picRankService.addPicRank(Pid);
+
             if (tags != null) {
                 tagService.setPicTags(Pid, tags);
             }
@@ -160,6 +164,14 @@ public class PicCoreController {
         return Result.succ(picDetail_vos);
     }
 
+    @GetMapping("/rank/likeTop")
+    public Result getTopLikes(@RequestParam(value = "topN", defaultValue = "10") Integer topN) {
+        return Result.succ(picRankService.getTopLikes(topN));
+    }
+    @GetMapping("/rank/seeTop")
+    public Result getTopSees(@RequestParam(value = "topN", defaultValue = "10") Integer topN) {
+        return Result.succ(picRankService.getTopSees(topN));
+    }
 
 
 

@@ -49,6 +49,8 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
     private PicUpdateMapper picUpdateMapper;
     @Autowired
     private RedisUtil redisUtil;
+    @Autowired
+    private PicRankService picRankService;
 
 
     @Override
@@ -93,6 +95,7 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
         PicCore pic = picCoreMapper.selectOne(new QueryWrapper<PicCore>().eq("pid", pid));
         String fileName = pic.getFilename();
         String status = pic.getStatus();
+
         if(fileName == null){
             throw new RuntimeException("图片不存在");
         }
@@ -102,6 +105,7 @@ public class PicCheckServiceImpl extends ServiceImpl<PicCheckMapper, PicCheck> i
         else if(status.equals("ABLE")){
             DeletePic(pid, fileName, picPath);
         }
+        picRankService.deletePicRank(pid);
 
 
     }
