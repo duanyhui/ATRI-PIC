@@ -3,6 +3,7 @@ package duan.controller;
 
 import cn.dev33.satoken.annotation.SaCheckPermission;
 import cn.dev33.satoken.stp.StpUtil;
+import duan.annotation.RateLimit;
 import duan.common.Result;
 import duan.entity.PicCore;
 import duan.entity.PicDetail_VO;
@@ -125,6 +126,7 @@ public class PicCoreController {
      * @param num
      * @return
      */
+    @RateLimit
     @GetMapping("/rand")
     public Result randPic(@RequestParam(value = "num",required = false,defaultValue = "1") Integer num){
         if(num>20)
@@ -141,7 +143,7 @@ public class PicCoreController {
         logUtils.urlLog("/get/"+pid, HeaderInterceptor.getSatoken());
         return Result.succ(picCoreService.getPic(pid));
     }
-
+    @RateLimit
     @PostMapping("/vote")
     public Result vote(@RequestParam("pid") Integer pid,
                        @RequestParam("vote") Integer vote){
@@ -153,6 +155,7 @@ public class PicCoreController {
         logUtils.VoteLog(vote,pid, HeaderInterceptor.getSatoken());
         return Result.succ("投票成功");
     }
+    @RateLimit
     @GetMapping("/getByTag")
     public Result getByTag(@RequestParam("tag") String tag,
                            @RequestParam(value = "num",required = false,defaultValue = "1") Integer num){
@@ -163,11 +166,12 @@ public class PicCoreController {
         logger.info("获取tag:{}的图片",tag);
         return Result.succ(picDetail_vos);
     }
-
+    @RateLimit
     @GetMapping("/rank/likeTop")
     public Result getTopLikes(@RequestParam(value = "topN", defaultValue = "10") Integer topN) {
         return Result.succ(picRankService.getTopLikes(topN));
     }
+    @RateLimit
     @GetMapping("/rank/seeTop")
     public Result getTopSees(@RequestParam(value = "topN", defaultValue = "10") Integer topN) {
         return Result.succ(picRankService.getTopSees(topN));
