@@ -21,6 +21,7 @@ public interface IPicCoreService extends IService<PicCore> {
     Integer upload(MultipartFile file, PicCore picCore) throws IOException;
 
     List<PicDetail_VO> getrandPic(Integer num);
+    List<PicDetail_VO> randPic(Integer num);
 
     PicDetail_VO getPic(Integer pid);
 

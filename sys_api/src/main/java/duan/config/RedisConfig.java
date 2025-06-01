@@ -37,4 +37,20 @@ public class RedisConfig {
         template.setHashValueSerializer(jackson2JsonRedisSerializer);
         return template;
     }
+
+//    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory factory) {
+//        RedisTemplate<String, Object> template = new RedisTemplate<>();
+//        template.setConnectionFactory(factory);
+//
+//        // 关键配置：使用 String 序列化器
+//        template.setKeySerializer(new StringRedisSerializer());
+//        template.setValueSerializer(new StringRedisSerializer());
+//
+//        // 对 List 操作的特殊序列化器
+//        template.setHashKeySerializer(new StringRedisSerializer());
+//        template.setHashValueSerializer(new StringRedisSerializer());
+//
+//        return template;
+//    }
+
 }

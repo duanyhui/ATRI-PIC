@@ -1,15 +1,13 @@
 package duan.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import duan.common.Result;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.entity.*;
 import duan.mapper.PicAttributeMapper;
 import duan.mapper.PicCoreMapper;
-import duan.mapper.TagMapper;
 import duan.service.IPicCoreService;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import duan.utils.MapUtils;
 import duan.utils.PicUtils;
+import duan.utils.RedisUtil;
 import duan.utils.UploadUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,9 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -53,6 +49,8 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     private PicNumServiceImpl picNumService;
     @Autowired
     private PicTagServiceImpl picTagService;
+    @Autowired
+    private RedisUtil redisUtil;
 
     /**
      *
@@ -86,6 +84,33 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
         return picCore.getPid();
     }
 
+    @Override
+    public List<PicDetail_VO> randPic(Integer num) {
+        if(redisUtil.lGetListSize("rand:pic:list") < num) {
+            // 如果缓存中没有图片，则从数据库中获取
+            return getrandPic(num);
+        }
+        //todo 一段时间请求过多，需要重新生成缓存来避免图片一直重复
+        long len = redisUtil.lGetListSize("rand:pic:list");
+        //每次请求时，先用 lLen 获取长度，然后用 lIndex(key, 随机下标) 随机取若干个元素
+        Random random = new Random();
+        Set<Integer> indexSet = new HashSet<>();
+        while (indexSet.size() < num) {
+            indexSet.add(random.nextInt((int) len));
+        }
+        List<PicDetail_VO> result = new ArrayList<>();
+        for (Integer idx : indexSet) {
+            Object obj = redisUtil.lGetIndex("rand:pic:list", idx);
+            if (obj != null) result.add((PicDetail_VO)obj);
+        }
+        // 如果缓存中没有足够的图片，则从数据库中获取
+        if (result.size() < num) {
+            List<PicDetail_VO> additionalPics = getrandPic(num - result.size());
+            result.addAll(additionalPics);
+        }
+        return result;
+
+    }
     @Override
     public List<PicDetail_VO> getrandPic(Integer num) {
         List<PicDetail_VO> list = new ArrayList<>();
