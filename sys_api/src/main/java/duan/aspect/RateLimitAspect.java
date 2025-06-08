@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 @Aspect
@@ -28,8 +27,7 @@ public class RateLimitAspect {
     public Object around(ProceedingJoinPoint joinPoint, RateLimit rateLimit) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        Cookie[] cookies = request.getCookies();
-        String satoken = cookies[0].getValue();
+        String satoken  = request.getHeader("satoken");
         String uuid = (String) StpUtil.getExtra(satoken, "uuid");
         String key = "rate_limit:" + uuid;
         // 获取当前请求的次数

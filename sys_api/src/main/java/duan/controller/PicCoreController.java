@@ -129,8 +129,8 @@ public class PicCoreController {
     @RateLimit
     @GetMapping("/rand")
     public Result randPic(@RequestParam(value = "num",required = false,defaultValue = "1") Integer num){
-        if(num>20)
-            return Result.fail("num不能大于20");
+        if(num>50)
+            return Result.fail("num不能大于50");
         if(num<=0)
             return Result.fail("num不能小于等于0");
         logger.info("获取随机图片num:{}",num);

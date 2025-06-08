@@ -88,6 +88,7 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     public List<PicDetail_VO> randPic(Integer num) {
         if(redisUtil.lGetListSize("rand:pic:list") < num) {
             // 如果缓存中没有图片，则从数据库中获取
+            logger.warn("缓存未命中");
             return getrandPic(num);
         }
         //todo 一段时间请求过多，需要重新生成缓存来避免图片一直重复
