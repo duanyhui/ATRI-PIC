@@ -14,4 +14,13 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface IUserService extends IService<User> {
 
     boolean login(String username, String password);
+
+    // 发送邮箱验证码
+    String sendEmailCode(String email);
+
+    // 校验邮箱验证码并注册用户
+    boolean registerByEmail(User user, String code);
+
+    // 根据邮箱查询用户
+    User getUserByEmail(String email);
 }

@@ -2,12 +2,12 @@ package duan.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
-import java.io.Serializable;
-
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.io.Serializable;
 
 /**
  * <p>
@@ -34,6 +34,12 @@ public class User implements Serializable {
 
       @ApiModelProperty("密码")
       private String pwd;
+
+      @ApiModelProperty("用户邮箱")
+      private String email;
+
+      @ApiModelProperty("邮箱是否已验证")
+      private Boolean isEmailVerified;
 
       @ApiModelProperty("区分角色权限ROOT，USER，VISITOR,STAFF")
       private String role;

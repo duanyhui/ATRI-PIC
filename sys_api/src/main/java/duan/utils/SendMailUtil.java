@@ -99,6 +99,54 @@ public class SendMailUtil {
         log.info("发送邮件：\tfrom: {}\tto:{}\tsub: {}\ttext: {}\t邮件发送成功....",  senderMail,mail, sub, text);
     }
 
+    @Async
+    public void sendRegisterMail(Integer code, String mail) throws MessagingException, GeneralSecurityException {
+        String senderMail = mailProperties.getSenderMail();         // 发件人电子邮箱
+        String mailHost = mailProperties.getHost();                 // 指定发送邮件的主机
+        String password = mailProperties.getPassword();             // 发件邮箱的密钥授权码
+//        String senderMail="heiheiduan02@163.com";
+//        String mailHost="smtp.163.com";
+//        String password="UYPDIGARZZAKUDXT";
+        // 获取系统属性
+        Properties properties = System.getProperties();
+        properties.setProperty("mail.smtp.host", mailHost);
+        properties.put("mail.smtp.auth", "true");
+
+        MailSSLSocketFactory sf = new MailSSLSocketFactory();
+        sf.setTrustAllHosts(true);
+        properties.put("mail.smtp.ssl.enable", "true");
+        properties.put("mail.smtp.ssl.socketFactory", sf);
+
+        // 获取默认 session 对象
+        Session session = Session.getDefaultInstance(properties, new Authenticator() {
+
+            @Override
+            public PasswordAuthentication getPasswordAuthentication() {
+                //发件人邮件用户名、授权码
+//                return new PasswordAuthentication("heiheiduan02@163.com", "UYPDIGARZZAKUDXT");
+                return new PasswordAuthentication(senderMail, password);
+            }
+
+        });
+        // 创建默认的 MimeMessage 对象
+        MimeMessage message = new MimeMessage(session);
+        // Set From: 头部头字段
+        message.setFrom(new InternetAddress(senderMail));
+        // Set To: 头部头字段
+        message.addRecipient(Message.RecipientType.TO, new InternetAddress(mail));
+        // Set Subject: 头部头字段
+        String sub = "ATRI-PIC-注册验证码通知";
+//        picHost = "http://localhost:8080";
+        message.setSubject(sub);
+        String text = "";
+        // 设置消息体
+        text = "您好，您注册的验证码为：" + code + "\n" + "请在5分钟内完成注册！";
+        message.setText(text);
+        // 发送消息
+        Transport.send(message);
+        log.info("发送邮件：\tfrom: {}\tto:{}\tsub: {}\ttext: {}\t邮件发送成功....",  senderMail,mail, sub, text);
+    }
+
     /**
      * 定时发送邮件
      */
