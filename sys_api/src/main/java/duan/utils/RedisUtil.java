@@ -643,6 +643,49 @@ public class RedisUtil {
     public Double zGetScore(String key, String member) {
         return redisTemplate.opsForZSet().score(key, member);
     }
+
+    /**
+     * 尝试获取分布式锁。
+     * 使用 Redis 的 SETNX (set if not exist) 和 EXPIRE 命令的原子操作特性。
+     *
+     * @param key        锁的唯一标识符 (例如："lock:my_resource")
+     * @param value      锁的值，通常设置为一个唯一的标识（例如 UUID），用于安全地释放锁 (当前简单实现未使用此值进行校验解锁)。
+     * @param expireTime 锁的自动过期时间，单位为秒。防止因进程意外终止而导致死锁。
+     * @return {@code true} 如果成功获取锁；{@code false} 如果锁已被其他进程持有或获取过程中发生异常。
+     */
+    public boolean tryLock(String key, String value, long expireTime) {
+        try {
+            // redisTemplate.opsForValue().setIfAbsent(key, value, duration, timeUnit)
+            // 这个方法在key不存在时设置key的值，并设置过期时间，是原子操作。
+            // 如果key已存在，则不进行任何操作并返回false。
+            // 如果key不存在，设置成功并返回true。
+            Boolean result = redisTemplate.opsForValue().setIfAbsent(key, value, expireTime, TimeUnit.SECONDS);
+            return Boolean.TRUE.equals(result); // 确保处理null情况，虽然setIfAbsent理论上返回boolean
+        } catch (Exception e) {
+            // 在实际项目中，这里应该使用更完善的日志记录机制，例如 SLF4J
+            System.err.println("尝试获取Redis锁时发生异常: " + key + ", " + e.getMessage());
+            // e.printStackTrace(); // 避免在生产代码中直接使用 printStackTrace
+            return false; // 获取锁过程中发生异常，视为获取失败，防止程序继续执行不安全的操作
+        }
+    }
+
+    /**
+     * 释放分布式锁。
+     * 简单地通过删除key来释放锁。
+     * 注意：这种简单的解锁方式在某些复杂场景下可能不够安全。
+     * 例如，如果一个进程获取锁后执行时间超过了锁的过期时间，锁可能已被其他进程获取。
+     * 此时，原进程再执行解锁操作可能会误删其他进程持有的锁。
+     * 更安全的做法是“校验值后再删除”，即只删除值为自己最初设置的那个唯一标识的锁（通常通过Lua脚本实现原子操作）。
+     *
+     * @param key 锁的唯一标识符。
+     */
+    public void unlock(String key) {
+        try {
+            redisTemplate.delete(key);
+        } catch (Exception e) {
+            // 在实际项目中，这里应该使用更完善的日志记录机制
+            System.err.println("尝试释放Redis锁时发生异常: " + key + ", " + e.getMessage());
+            // e.printStackTrace();
+        }
+    }
 }
-
-

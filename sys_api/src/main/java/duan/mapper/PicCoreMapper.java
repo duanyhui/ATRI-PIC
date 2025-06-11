@@ -26,4 +26,6 @@ public interface PicCoreMapper extends BaseMapper<PicCore> {
     PicDetail_VO selectRandPicByTag(String tag);
 
     List<PicDetail_VO> getAllPicByTag(String tag);
+
+    List<PicDetail_VO> selectRandPicListByTag(String tag, Integer num);
 }

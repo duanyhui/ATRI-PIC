@@ -22,7 +22,7 @@ public class RandPicCacheTask {
     // 每5分钟刷新一次缓存
     @Scheduled(fixedRate = 5*60*1000)
     public void cacheRandPics() {
-        List<PicDetail_VO> randPicList = picCoreService.getrandPic(CACHE_SIZE);
+        List<PicDetail_VO> randPicList = picCoreService.getrandPicFromDb(CACHE_SIZE);
         redisUtil.del(RAND_PIC_KEY); // 清空旧缓存
         for (PicDetail_VO pic : randPicList) {
             // 将每个图片对象转换为JSON字符串存储

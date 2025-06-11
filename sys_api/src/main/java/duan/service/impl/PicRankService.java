@@ -4,6 +4,7 @@ import duan.entity.PicDetail_VO;
 import duan.service.IPicRankService;
 import duan.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ public class PicRankService implements IPicRankService {
     @Autowired
     private RedisUtil redisUtil;
     @Autowired
+    @Lazy
     private PicCoreServiceImpl picCoreService;
 
     // 点赞时调用
