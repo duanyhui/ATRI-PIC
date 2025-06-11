@@ -3,6 +3,7 @@ package duan.service.impl;
 import cn.dev33.satoken.secure.SaSecureUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import duan.constant.UserRoleConstant;
 import duan.entity.User;
 import duan.mapper.UserMapper;
 import duan.service.IUserService;
@@ -34,12 +35,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private static final long EMAIL_CODE_EXPIRE_SECONDS = 300; // 验证码5分钟有效
 
     @Override
-    public boolean login(String username, String password) {
+    public boolean adminLogin(String username, String password) {
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-
         wrapper.eq(User::getUsername,username);
         if(userMapper.selectOne(wrapper)==null)
             return false;
+        if(!userMapper.selectOne(wrapper).getRole().equals(UserRoleConstant.ADMIN))
+            return false; // 不是管理员角色
+        String pwd = userMapper.selectOne(wrapper).getPwd();
+        if(HashUtils.MatchHash(password,pwd))
+            return true;
+        else
+            return false;
+
+    }
+    @Override
+    public boolean userLogin(String email, String password) {
+        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
+
+        wrapper.eq(User::getEmail,email);
+        if(userMapper.selectOne(wrapper)==null)
+            return false;
+        if(!userMapper.selectOne(wrapper).getRole().equals(UserRoleConstant.USER))
+            return false; // 不是普通用户角色
         String pwd = userMapper.selectOne(wrapper).getPwd();
         if(HashUtils.MatchHash(password,pwd))
             return true;

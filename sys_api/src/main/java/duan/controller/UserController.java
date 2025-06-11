@@ -1,9 +1,11 @@
 package duan.controller;
 
 
+import cn.dev33.satoken.stp.SaLoginConfig;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import duan.common.Result;
+import duan.constant.TokenConstant;
 import duan.entity.User;
 import duan.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -26,6 +31,24 @@ public class UserController {
 
     @Autowired
     private IUserService userService;
+
+    @PostMapping("/login")
+    public Result login(@RequestParam String email, @RequestParam String pwd) {
+        if (email.isEmpty() || pwd.isEmpty()) {
+            return Result.fail("邮箱和密码不能为空");
+        }
+        boolean success = userService.userLogin(email, pwd);
+        if (success) {
+            List<String> role = new ArrayList<>();
+            role.add(TokenConstant.USER_UPLOAD);
+            // 登录成功后，使用Sa-Token生成token并返回
+            User user = userService.getUserByEmail(email);
+            StpUtil.login(user.getUid(), SaLoginConfig.setExtra("role", role));
+            SaTokenInfo tokenInfo = StpUtil.getTokenInfo();
+            return Result.succ(tokenInfo);
+        }
+        return Result.fail("登录失败，邮箱或密码错误");
+    }
 
     @PostMapping("/send-email-code")
     public Result sendEmailCode(@RequestParam String email) {

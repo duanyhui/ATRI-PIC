@@ -42,7 +42,7 @@ public class AdminController {
     @PostMapping("/login")
     public Result login(@RequestParam("username") String username,
                         @RequestParam("password") String password){
-        if(userService.login(username,password)){
+        if(userService.adminLogin(username,password)){
             List<String> list = new ArrayList<>();
             list.add("*");
             StpUtil.login(username, SaLoginConfig.setExtra("role",list));
