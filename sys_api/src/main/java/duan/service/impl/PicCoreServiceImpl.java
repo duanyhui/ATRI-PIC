@@ -1,5 +1,6 @@
 package duan.service.impl;
 
+import cn.dev33.satoken.stp.StpUtil; // 新增：引入SaToken工具类
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import duan.entity.*;
@@ -62,7 +63,8 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     private static final int CACHE_EXPIRE = 300;
     // --- 动态刷新缓存相关的常量 ---
     // Redis中存储 /pic/rand 接口访问次数的键
-    private static final String RAND_PIC_ACCESS_COUNT_KEY = "rand:pic:access_count";
+    // private static final String RAND_PIC_ACCESS_COUNT_KEY = "rand:pic:access_count"; // 删除全局计数key
+    private static final String RAND_PIC_ACCESS_COUNT_KEY_PREFIX = "rand:pic:access_count:"; // 新增：用户维度计数key前缀
     // 访问次数阈值，当达到此值时触发异步刷新
     private static final int ACCESS_COUNT_THRESHOLD = 10; // 例如：100次访问后触发
     // 访问次数计数器的时间窗口（秒）
@@ -114,15 +116,18 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
     @Override
     public List<PicDetail_VO> randPic(Integer num) {
         // --- 动态刷新缓存逻辑 ---
-        // 记录接口访问次数
-        long currentCount = redisUtil.incr(RAND_PIC_ACCESS_COUNT_KEY, 1);
+        // 获取当前用户uuid
+        String uuid = StpUtil.getLoginIdAsString();
+        String userAccessCountKey = RAND_PIC_ACCESS_COUNT_KEY_PREFIX + uuid;
+        // 记录接口访问次数（按用户）
+        long currentCount = redisUtil.incr(userAccessCountKey, 1);
         // 如果是时间窗口内的第一次访问（即键是新创建的），为计数器设置过期时间
         if (currentCount == 1) {
-            redisUtil.expire(RAND_PIC_ACCESS_COUNT_KEY, ACCESS_COUNT_WINDOW_SECONDS);
+            redisUtil.expire(userAccessCountKey, ACCESS_COUNT_WINDOW_SECONDS);
         }
         // 检查是否达到刷新阈值
         if (currentCount >= ACCESS_COUNT_THRESHOLD) {
-            logger.info("接口 /pic/rand 访问达到阈值 ({}/{})，尝试触发异步缓存刷新。", currentCount, ACCESS_COUNT_THRESHOLD);
+            logger.info("用户 {} 接口 /pic/rand 访问达到阈值 ({}/{}), 尝试触发异步缓存刷新。", uuid, currentCount, ACCESS_COUNT_THRESHOLD);
             // 调用异步刷新方法
             refreshRandPicCacheAsync();
         }
@@ -238,10 +243,11 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
                 logger.warn("从数据库获取的随机图片列表为空或null，未执行缓存刷新操作。");
             }
 
-            // 缓存刷新（无论成功与否或是否有数据）后，重置接口访问计数器。
-            // 这个操作放在锁内，确保与缓存刷新操作的“尝试”相关联。
-            redisUtil.del(RAND_PIC_ACCESS_COUNT_KEY);
-            logger.info("已重置接口访问计数器 '{}'。", RAND_PIC_ACCESS_COUNT_KEY);
+            // 缓存刷新（无论成功与否或是否有数据）后，重置所有用户的接口访问计数器。
+            // 由于现在是按用户计数，建议只重置当前用户的计数器，或者不重置（让每个用户独立计数）。
+            // redisUtil.del(RAND_PIC_ACCESS_COUNT_KEY); // 删除全局计数key
+            // 不再全局重置，用户自己的计数会自动过期
+            logger.info("无需重置所有用户的接口访问计数器，用户计数会自动过期。");
             // --- 核心的缓存刷新逻辑结束 ---
 
             logger.info("异步刷新随机图片缓存任务完成。");
@@ -260,7 +266,7 @@ public class PicCoreServiceImpl extends ServiceImpl<PicCoreMapper, PicCore> impl
 
 
     // getrandPic 方法名修改为 getrandPicFromDb 以明确其数据来源
-    // 原 getrandPic(Integer num) 方法实现已合并到 getrandPicFromDb(Integer num)
+    // 原 getrandPic(Integer num) 方法实现已合并到 getrandPicFromDb
     // 保留原始的 getrandPic 签名，但其实现现在是 getrandPicFromDb
     // 为了清晰，将原先的 public List<PicDetail_VO> getrandPic(Integer num) 重命名为 getrandPicFromDb
     // 而 randPic(Integer num) 是处理缓存逻辑的顶层方法。
